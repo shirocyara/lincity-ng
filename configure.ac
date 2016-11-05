@@ -1,75 +1,99 @@
-#----------------------------------------------------------------------------
-# Autoconf input script. Start the ./autgen.sh script to create
-# configure script.
-#----------------------------------------------------------------------------
-AC_PREREQ([2.54])
+﻿#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
 
-AC_INIT([lincity-ng], [2.0], [matze@braunis.de])
-AC_CONFIG_SRCDIR([mk/jam/build.jam])
+AC_PREREQ([2.69])
+AC_INIT([lincity-ng], [2.0], [matze@braunis.de],,https://github.com/lincity-ng/lincity-ng)
 AC_CONFIG_AUX_DIR([mk/autoconf])
+AC_CONFIG_MACRO_DIR([mk/macro])
+AM_INIT_AUTOMAKE(subdir-objects)
+
+#AC_USE_SYSTEM_EXTENSIONS
+#AM_GNU_GETTEXT([external])
+#AM_GNU_GETTEXT_VERSION(0.19.7)
+#AM_GNU_GETTEXT_INTL_SUBDIR
 
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
-AC_CANONICAL_TARGET
 
-#----------------------------------------------------------------------------
-# Configuration header
-#----------------------------------------------------------------------------
-AC_CONFIG_HEADERS(config.h)
-
-# stupid autoconf is adding default -g -O2 flags when we don't want this :-/
-test ".$CXXFLAGS" = "." && CXXFLAGS=" "
-test ".$CFLAGS" = "." && CFLAGS=" "
+AC_CONFIG_SRCDIR([src/lincity-ng/main.cpp])
+AC_CONFIG_HEADERS([config.h])
 
 #----------------------------------------------------------------------------
 # Check for build variant (debug, profile, optimize)
 #----------------------------------------------------------------------------
 VARIANT=optimize
-AC_ARG_ENABLE([optimize], [AC_HELP_STRING([--enable-optimize],
+AC_ARG_ENABLE([optimize], [AS_HELP_STRING([--enable-optimize],
     [build with optimizations enabled (default YES)])],
     [test "$enableval" = "yes" && VARIANT=optimize])
-                                                                                
-AC_ARG_ENABLE([debug], [AC_HELP_STRING([--enable-debug],
+
+AC_ARG_ENABLE([debug], [AS_HELP_STRING([--enable-debug],
     [build with debugging information (default NO)])],
     [test "$enableval" = "yes" && VARIANT=debug])
-                                                                                
-AC_ARG_ENABLE([profile], [AC_HELP_STRING([--enable-profile],
+
+AC_ARG_ENABLE([profile], [AS_HELP_STRING([--enable-profile],
     [build with profiling information (default NO)])],
     [test "$enableval" = "yes" && VARIANT=profile])
 AC_SUBST([VARIANT])
 
 #----------------------------------------------------------------------------
-# find applications
+# Checks for programs.
 #----------------------------------------------------------------------------
+AM_PROG_AR
 AC_PROG_CXX
 AC_PROG_INSTALL
+AC_PROG_RANLIB
 AC_CHECK_PROGS([XGETTEXT], xgettext)
 AC_CHECK_PROGS([XSLTPROC], xsltproc)
 
 # check if our c++ compiler is gcc3.2 or newer
 AC_MSG_CHECKING([whether g++ is new enough])
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
-AC_TRY_COMPILE([], [
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [
 #ifndef __GNUC__
 #error no gcc compiler found (__GNUC__ not defined)
 #endif
 #if __GNUC__ < 3 || (__GNUC__ == 3 && __GNUC__ < 2)
 #error gcc compiler too old. Need at least version 3.2.0
 #endif
-], [AC_MSG_RESULT([yes])], [
-	AC_MSG_RESULT([no])
+])],[AC_MSG_RESULT(yes)], [
+	AC_MSG_RESULT(no)
 	AC_MSG_ERROR([
 Error: Your gcc version is too old. Lincity-ng needs at least gcc 3.2.0.
 ])])
-AC_LANG_RESTORE
+AC_LANG_POP([C++])
 
 #----------------------------------------------------------------------------
-# check headers
+# Checks for libraries.
+#----------------------------------------------------------------------------
+
+AX_BINRELOC
+
+AX_CHECK_ZLIB
+
+AM_PATH_XML2(2.6.11)
+
+AX_CHECK_GL
+
+dnl Check for SDL
+SDL_VERSION=1.2.5
+AM_PATH_SDL($SDL_VERSION, :, AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!]))
+AX_PATH_SDL_XXX([mixer], [1.2.2], :, AC_MSG_ERROR([*** SDL_mixer version over 1.2.2 not found!]))
+AX_PATH_SDL_XXX([image], [1.2.1], :, AC_MSG_ERROR([*** SDL_image version over 1.2.1 not found!]))
+AX_PATH_SDL_XXX([ttf],   [2.0.8], :, AC_MSG_ERROR([*** SDL_ttf version over 2.0.8 not found!]))
+AX_PATH_SDL_XXX([gfx],   [2.0.13],:, AC_MSG_ERROR([*** SDL_gfx version over 2.0.13 not found!]))
+AC_CHECK_LIB([physfs], [PHYSFS_init], AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([Please install physfs >= 1.0]))
+
+#----------------------------------------------------------------------------
+# Checks for header files.
 #----------------------------------------------------------------------------
 AC_HEADER_DIRENT
-AC_HEADER_TIME
 AC_HEADER_STDC
+AC_HEADER_TIME
+
+AC_CHECK_HEADERS([fcntl.h limits.h stddef.h stdint.h unistd.h])
+
+AC_CHECK_HEADERS([physfs.h], ,
+  AC_MSG_ERROR([ *** PhysFS library found but cannot find headers (http://icculus.org/physfs/)]))
 
 # compiler characteristics
 AC_C_CONST
@@ -80,87 +104,89 @@ AM_ICONV
 AC_SUBST([ICONV_LIBS], [$LIBICONV])
 
 #----------------------------------------------------------------------------
-# find libraries
+# Checks for typedefs, structures, and compiler characteristics.
 #----------------------------------------------------------------------------
-AM_BINRELOC
+AC_CHECK_HEADER_STDBOOL
+AC_C_INLINE
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
+AC_TYPE_INT64_T
+AC_TYPE_INT8_T
+AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
+AC_TYPE_UINT64_T
+AC_TYPE_UINT8_T
 
-NP_FINDLIB([ZLIB], [zlib], [zlib],
-	NP_LANG_PROGRAM([[#include <zlib.h>]],
-            [[gzFile* file = gzopen("", "");]]),
-	[], [-lz],
-	[],
-	[AC_MSG_ERROR([Please install zlib])])
+#----------------------------------------------------------------------------
+# Checks for library functions.
+#----------------------------------------------------------------------------
+AC_FUNC_CHOWN
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_CHECK_FUNCS([floor getcwd memset mkdir pow setlocale sqrt strcasecmp strchr strdup strerror strrchr strstr])
 
-PKG_CHECK_MODULES([LIBXML], [libxml-2.0 >= 2.6.11])
+AS_CASE([$host_os],[mingw*], [
+  CPPFLAGS+=" -static-libgcc -static-libstdc++"
+#  CPPFLAGS="$CPPFLAGS -static-libgcc -static-libstdc++ -Wl,-yn,-lpthread"
+#  LIBS="$LIBS -lws2_32 -lpsapi -liphlpapi -lshell32 -luserenv -luser32"
+])
 
-AX_CHECK_GL
-if test "$no_gl" = "yes"; then
-    AC_MSG_ERROR([Couldn't find opengl libraries or headers])
-fi
+case "${VARIANT}" in
+  "optimize" )
+    CXXFLAGS="-O3 -g -Wall"
+#    CXXFLAGS="$CXXFLAGS -march=native"
+    LIBS="-g $LIBS"
+    ;;
+  "debug" )
+    CXXFLAGS="-Wall -W -O0 -g3 -DDEBUG -Werror"
+    LIBS="-g3 $LIBS"
+    ;;
+  "profile" )
+    CXXFLAGS="-O3 -g3 -pg"
+    LIBS="-g3 -pg $LIBS"
+    ;;
+  * ) AC_MSG_ERROR([Invalid variant ${VARIANT} selected]) ;;
+esac
 
-AM_PATH_SDL([1.2.5], , AC_MSG_ERROR([Please install libsdl >= 1.2.5]))
-
-NP_FINDLIB([SDLMIXER], [SDL_mixer], [SDL_mixer >= 1.2],
-	NP_LANG_PROGRAM([#include <SDL_mixer.h>
-#if MIX_MAJOR_VERSION < 1
-# error SDLMix too old
-#else
-# if MIX_MAJOR_VERSION == 1
-#  if MIX_MINOR_VERSION < 2
-#   error SDLMix too old
-#  endif
-# endif
-#endif], [Mix_OpenAudio(0, 0, 0, 0);]),
-	[], [-lSDL_mixer],
-	[],
-	[AC_MSG_ERROR([Please install SDLMixer >=1.2.2])],
-	[$SDL_CFLAGS], [$SDL_LIBS])
-
-NP_FINDLIB([SDLIMAGE], [SDL_image], [SDL_image >= 1.2],
-	NP_LANG_PROGRAM([#include <SDL_image.h>], [IMG_Load("");]),
-	[], [-lSDL_image],
-	[],
-	[AC_MSG_ERROR([Please install SDLImage >= 1.2.1])],
-	[$SDL_CFLAGS], [$SDL_LIBS])
-
-NP_FINDLIB([SDLTTF], [SDL_ttf], [SDL_ttf >= 2.0.8],
-NP_LANG_PROGRAM([#include <SDL_ttf.h>], [if(!TTF_WasInit()) TTF_Init();]),
-	[], [-lSDL_ttf],
-	[],
-	[AC_MSG_ERROR([Please install SDL_ttf >= 2.0.8])],
-	[$SDL_CFLAGS], [$SDL_LIBS])
-
-NP_FINDLIB([SDLGFX], [SDL_gfx], [SDL_gfx >= 2.0.13],
-		NP_LANG_PROGRAM([#include <SDL_gfxPrimitives.h> 
-#if SDL_GFXPRIMITIVES_MAJOR < 2
-# error SDL_GFX too old
-#endif
-], [hlineColor(0, 0, 0, 0, 0);]),
-	[], [-lSDL_gfx],
-	[],
-	[AC_MSG_ERROR([Please install SDL_gfx >= 2.0.13])],
-	[$SDL_CFLAGS], [$SDL_LIBS])
-
-NP_FINDLIB([PHYSFS], [physfs], [physfs >= 1.0.0],
-	NP_LANG_PROGRAM([
-#include <stdio.h>
-#include <physfs.h>
-#if PHYSFS_VER_MAJOR < 1
-# error PHYSFS is too old
-#endif]),
-	[], [-lphysfs],
-	[],
-	[AC_MSG_ERROR([Please install physfs >= 1.0])])
-    
-AC_INIT_JAM
-AC_CONFIG_FILES([Jamconfig])
-
-# We have a config.h file
-CPPFLAGS="$CPPFLAGS -DHAVE_CONFIG_H"
-
+AC_CONFIG_FILES([Makefile
+                 src/Makefile
+                 src/gui/Makefile
+                 src/PhysfsStream/Makefile
+                 src/tinygettext/Makefile
+                 src/lincity/Makefile
+                 src/lincity-ng/Makefile])
+#AC_CONFIG_FILES([Makefile po/Makefile.in])
 AC_OUTPUT
 
-AC_MSG_NOTICE([
-
-Notice: This project uses jam (and not make) as build tool.
-])
+AC_MSG_NOTICE([-------------------------------------------------------------------
+ Configuration results
+host  : $host
+build : $build
+PACKAGE_NAME    : $PACKAGE_NAME
+PACKAGE_VERSION : $PACKAGE_VERSION
+------------------------------------------------------------------------------
+BINRELOC_LIBS   : $BINRELOC_LIBS
+BINRELOC_CFLAGS : $BINRELOC_CFLAGS
+ZLIB_LIBS       : $ZLIB_LIBS
+XML_LIBS        : $XML_LIBS
+XML_CPPFLAGS    : $XML_CPPFLAGS
+GL_LIBS         : $GL_LIBS
+GL_CFLAGS       : $GL_CFLAGS
+SDL_LIBS        : $SDL_LIBS
+SDL_CFLAGS      : $SDL_CFLAGS
+SDL_LIBS_mixer  : $SDL_LIBS_mixer
+SDL_LIBS_ttf    : $SDL_LIBS_ttf
+SDL_LIBS_image  : $SDL_LIBS_image
+SDL_LIBS_gfx    : $SDL_LIBS_gfx
+ICONV_LIBS      : $ICONV_LIBS
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+LIBS            : $LIBS
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+CXXFLAGS        : $CXXFLAGS
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+CPPFLAGS        : $CPPFLAGS
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+LDFLAGS         : $LDFLAGS
+------------------------------------------------------------------------------])

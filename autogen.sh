@@ -6,17 +6,8 @@ if test ! -f configure.ac ; then
   exit 1
 fi
 
-aclocal -I mk/autoconf
+aclocal
 autoheader
-
-# generate Jamconfig.in
-autoconf --trace=AC_SUBST \
-  | sed -e 's/configure.ac:[0-9]*:AC_SUBST:\([^:]*\).*/\1 ?= "@\1@" ;/g' \
-  > Jamconfig.in~
-cat Jamconfig.in~ | sed -e 's/.*BACKSLASH.*//' > Jamconfig.in
-rm Jamconfig.in~
-echo 'INSTALL ?= "@INSTALL@" ;' >> Jamconfig.in
-echo 'JAMCONFIG_READ = yes ;' >> Jamconfig.in
-
+automake --add-missing --copy
 autoconf
 
