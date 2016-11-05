@@ -127,12 +127,6 @@ AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([floor getcwd memset mkdir pow setlocale sqrt strcasecmp strchr strdup strerror strrchr strstr])
 
-AS_CASE([$host_os],[mingw*], [
-  CPPFLAGS+=" -static-libgcc -static-libstdc++"
-#  CPPFLAGS="$CPPFLAGS -static-libgcc -static-libstdc++ -Wl,-yn,-lpthread"
-#  LIBS="$LIBS -lws2_32 -lpsapi -liphlpapi -lshell32 -luserenv -luser32"
-])
-
 case "${VARIANT}" in
   "optimize" )
     CXXFLAGS="-O3 -g -Wall"
@@ -149,6 +143,12 @@ case "${VARIANT}" in
     ;;
   * ) AC_MSG_ERROR([Invalid variant ${VARIANT} selected]) ;;
 esac
+
+AS_CASE([$host_os],[mingw*], [
+  CXXFLAGS+=" -static-libgcc -static-libstdc++"
+#  CXXFLAGS="$CPPFLAGS -static-libgcc -static-libstdc++ -Wl,-yn,-lpthread"
+#  LIBS="$LIBS -lws2_32 -lpsapi -liphlpapi -lshell32 -luserenv -luser32"
+])
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile
