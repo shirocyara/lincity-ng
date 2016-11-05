@@ -27,7 +27,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW64__)
 #include <direct.h>
 #include <io.h>
 #endif

@@ -6,6 +6,8 @@ Makefile.in
 aclocal.m4
 autom4te.cache/
 .deps/
+.dirstamp
+stamp-h1
 *.o
 *.a
 *.exe
@@ -23,6 +25,8 @@ config.h.in
 config.log
 config.status
 configure
+AUTHORS
+INSTALL
 data/locale/gui/messages.pot
 data/locale/messages.pot
 lincity-ng

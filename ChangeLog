@@ -1,0 +1,7 @@
+
+< #ifdef _MSC_VER
+---
+> #if defined(_MSC_VER) || defined(__MINGW64__)
+
+	src/lincity/fileutil.cpp
+
