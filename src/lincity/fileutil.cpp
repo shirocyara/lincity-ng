@@ -414,7 +414,11 @@ void init_path_strings(void)
 {
     find_libdir();
     //TODO: use, remove unused vars.
-    const char* homedir = PHYSFS_getUserDir();
+#if defined (WIN32)
+	const char* homedir = PHYSFS_getBaseDir();
+#else
+	const char* homedir = PHYSFS_getPrefDir("Lincity-NG","lincity-ng");
+#endif
 
     /* Various dirs and files */
     lc_save_dir_len = strlen(homedir) + strlen(LC_SAVE_DIR) + 1;

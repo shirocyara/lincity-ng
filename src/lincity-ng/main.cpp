@@ -85,13 +85,17 @@ void initPhysfs(const char* argv0)
     // Initialize physfs (this is a slightly modified version of
     // PHYSFS_setSaneConfig
     const char* application = LC_SAVE_DIR;
-    const char* userdir = PHYSFS_getUserDir();
-    const char* dirsep = PHYSFS_getDirSeparator();
+#if defined (WIN32)
+	const char* userdir = PHYSFS_getBaseDir();
+#else
+	const char* userdir = PHYSFS_getPrefDir("Lincity-NG","lincity-ng");
+#endif
+	const char* dirsep = PHYSFS_getDirSeparator();
     char* writedir = new char[strlen(userdir) + strlen(application) + 2];
 
     // Set configuration directory
     //sprintf(writedir, "%s.%s", userdir, application);
-    sprintf(writedir, "%s%s", userdir, application);
+    sprintf(writedir, "%s%s%s", userdir, application, dirsep);
     if(!PHYSFS_setWriteDir(writedir)) {
         // try to create the directory
         char* mkdir = new char[strlen(application) + 2];
