@@ -144,11 +144,13 @@ case "${VARIANT}" in
   * ) AC_MSG_ERROR([Invalid variant ${VARIANT} selected]) ;;
 esac
 
+RES_FILE=""
 AS_CASE([$host_os],[mingw*], [
   CXXFLAGS+=" -static-libgcc -static-libstdc++"
-#  CXXFLAGS="$CPPFLAGS -static-libgcc -static-libstdc++ -Wl,-yn,-lpthread"
+  RES_FILE="${ac_pwd}/contrib/win32/lincity-ng.res"
 #  LIBS="$LIBS -lws2_32 -lpsapi -liphlpapi -lshell32 -luserenv -luser32"
 ])
+AC_SUBST([RES_FILE])
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile

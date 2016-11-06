@@ -6,8 +6,12 @@ if test ! -f configure.ac ; then
   exit 1
 fi
 
+echo aclocal
 aclocal
+echo autoheader
 autoheader
+echo automake --add-missing --copy
 automake --add-missing --copy
+echo autoconf
 autoconf
 

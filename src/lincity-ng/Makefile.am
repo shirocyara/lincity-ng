@@ -11,4 +11,4 @@ lincity_ng_SOURCES = \
   binreloc.h
 
 lincity_ng_LDADD = \
-  ../gui/liblincity_gui.a ../lincity/liblincity_lib.a ../tinygettext/libtinygettext.a ../PhysfsStream/libphysfsstream.a
+  ../gui/liblincity_gui.a ../lincity/liblincity_lib.a ../tinygettext/libtinygettext.a ../PhysfsStream/libphysfsstream.a ${RES_FILE}

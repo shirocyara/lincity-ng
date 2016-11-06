@@ -2,8 +2,13 @@
 cat data/gui/creditslist.xml |grep -v "@"|cut -d\> -f2|cut -d\< -f1 >AUTHORS
 echo "# automatically generated from data/gui/creditslist.xml. Do not edit. #">>AUTHORS
 
-find ./ -name *.o | xargs rm
-find ./ -name *.a | xargs rm
+find ./ -name *.o -exec rm {} \;
+find ./ -name *.a -exec rm {} \;
+find ./ -name *.exe -exec rm {} \;
+
 ./autogen.sh
+
+windres contrib/win32/lincity-ng.rc -O coff -o contrib/win32/lincity-ng.res
+
 ./configure
 make

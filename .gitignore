@@ -12,6 +12,7 @@ stamp-h1
 *.a
 *.exe
 *~
+contrib/win32/lincity-ng.res
 mk/autoconf/ar-lib
 mk/autoconf/compile
 mk/autoconf/config.guess
