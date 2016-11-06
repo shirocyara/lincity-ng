@@ -134,7 +134,7 @@ case "${VARIANT}" in
     LIBS="-g $LIBS"
     ;;
   "debug" )
-    CXXFLAGS="-Wall -W -O0 -g3 -DDEBUG -Werror"
+    CXXFLAGS="-Wall -W -O0 -g3 -DDEBUG"
     LIBS="-g3 $LIBS"
     ;;
   "profile" )
