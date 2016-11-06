@@ -210,27 +210,31 @@ int file_exists(char *filename)
 #if defined (WIN32)
 void find_libdir(void)
 {
-    const char searchfile[] = "Colour.pal";
-    /* default_dir will be something like "C:\\LINCITY1.11" */
-    const char default_dir[] = "C:\\LINCITY" PACKAGE_VERSION;
-//    const char default_dir[] = "D:\\LINCITY"; /* For GCS's use */
+	const char searchfile[] = "Colour.pal";
+	char *home_dir, *cwd;
+	char cwd_buf[LC_PATH_MAX];
+	char filename_buf[LC_PATH_MAX];
 
-    /* Check 1: environment variable */
-    _searchenv(searchfile, "LINCITY_HOME", LIBDIR);
-    if (*LIBDIR != '\0') {
-        int endofpath_offset = strlen(LIBDIR) - strlen(searchfile) - 1;
-        LIBDIR[endofpath_offset] = '\0';
-        return;
-    }
+	/* Check 1: environment variable */
+	_searchenv(searchfile, "LINCITY_HOME", LIBDIR);
+	if (*LIBDIR != '\0') {
+		int endofpath_offset = strlen(LIBDIR) - strlen(searchfile) - 1;
+		LIBDIR[endofpath_offset] = '\0';
+		return;
+	}
 
-    /* Check 2: default location */
-    if ((_access(default_dir, 0)) != -1) {
-        strcpy(LIBDIR, default_dir);
-        return;
-    }
+	/* Check 2: current working directory */
+	cwd = getcwd(cwd_buf, LC_PATH_MAX);
+	if (cwd) {
+		snprintf(filename_buf, LC_PATH_MAX, "%s%c%s%c%s", cwd_buf, PATH_SLASH, "data", PATH_SLASH, searchfile);
+		if (file_exists(filename_buf)) {
+			strncpy(LIBDIR, cwd_buf, LC_PATH_MAX);
+			return;
+		}
+	}
 
-    /* Finally give up */
-    HandleError(_("Error. Can't find LINCITY_HOME"), FATAL);
+	/* Finally give up */
+	HandleError(_("Error. Can't find LINCITY_HOME"), FATAL);
 }
 
 #elif defined (__EMX__)
