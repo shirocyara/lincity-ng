@@ -499,13 +499,15 @@ MainMenu::changeTrack( bool next)
 
     char **files= PHYSFS_enumerateFiles(directory.c_str());
     char **fptr=files;
+	PHYSFS_Stat statbuf;
     while(*fptr)
     {
         fullname = directory;
         fullname.append( *fptr );
         filename.assign( *fptr );
         
-        if(!PHYSFS_isDirectory(fullname.c_str())){
+		PHYSFS_stat(fullname.c_str(), &statbuf);
+		if(statbuf.filetype != PHYSFS_FILETYPE_DIRECTORY){
             if( filename == currentname ){
                 hit = true;
             } else if ( !hit ){

@@ -129,6 +129,7 @@ void Game::testAllHelpFiles(){
     std::string directory = "help/en";
     std::string fullname;
     char **rc = PHYSFS_enumerateFiles( directory.c_str() );
+	PHYSFS_Stat statbuf;
     char **i;
     size_t pos;
     for (i = rc; *i != NULL; i++) {
@@ -136,8 +137,9 @@ void Game::testAllHelpFiles(){
         fullname.append( *i );
         filename.assign( *i );
 
-        if(PHYSFS_isDirectory(fullname.c_str()))
-            continue;
+		PHYSFS_stat(fullname.c_str() , &statbuf);
+		if(statbuf.filetype == PHYSFS_FILETYPE_DIRECTORY)
+			continue;
 
         pos = filename.rfind( ".xml" );
         if( pos != std::string::npos ){

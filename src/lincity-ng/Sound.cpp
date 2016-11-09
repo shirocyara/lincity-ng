@@ -55,13 +55,15 @@ Sound::loadWaves() {
     Mix_Chunk *chunk;
     SDL_RWops* file;
     char **rc = PHYSFS_enumerateFiles( directory.c_str() );
+	PHYSFS_Stat statbuf;
     char **i;
     for (i = rc; *i != NULL; i++) {
         fullname = directory;
         fullname.append( *i );
         filename.assign( *i );
 
-        if(PHYSFS_isDirectory(fullname.c_str()))
+		PHYSFS_stat(fullname.c_str(), &statbuf);
+		if(statbuf.filetype == PHYSFS_FILETYPE_DIRECTORY)
             continue;
             
         try {        
