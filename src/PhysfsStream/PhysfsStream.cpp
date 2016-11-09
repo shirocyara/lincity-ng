@@ -43,7 +43,7 @@ IFileStreambuf::underflow()
     if(PHYSFS_eof(file))
         return traits_type::eof();
     
-    size_t bytesread = (size_t) PHYSFS_read(file, buf, 1, sizeof(buf));
+    size_t bytesread = (size_t) PHYSFS_readBytes(file, buf, sizeof(buf));
     if(bytesread == 0)
         return traits_type::eof();
     setg(buf, buf, buf + bytesread);

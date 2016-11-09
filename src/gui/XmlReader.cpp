@@ -74,7 +74,7 @@ int
 XmlReader::readCallback(void* context, char* buffer, int len)
 {
     PHYSFS_file* file = (PHYSFS_file*) context;
-    PHYSFS_sint64 result = PHYSFS_read(file, buffer, 1, len);
+    PHYSFS_sint64 result = PHYSFS_readBytes(file, buffer, len);
     if(result < 0) {
         std::cerr << "Read error: " << PHYSFS_getLastError() << "\n";
     }
