@@ -325,8 +325,8 @@ void flipScreenBuffer()
 
 void mainLoop()
 {
-    std::auto_ptr<MainMenu> menu;
-    std::auto_ptr<Game> game;
+    std::unique_ptr<MainMenu> menu;
+    std::unique_ptr<Game> game;
     MainState state = MAINMENU;
     MainState nextstate;
     
@@ -487,7 +487,7 @@ int main(int argc, char** argv)
     try {
 #endif
         xmlInitParser ();
-        std::auto_ptr<Sound> sound; 
+        std::unique_ptr<Sound> sound; 
         sound.reset(new Sound()); 
         initSDL();
         initTTF();

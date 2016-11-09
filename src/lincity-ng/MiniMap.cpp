@@ -529,7 +529,7 @@ void MiniMap::draw(Painter &painter)
     // FIXME: should be stored SDL_Surface and then blitted
     // SDL_Surface should be updated, only if needed
 
-    std::auto_ptr<Painter> mpainter 
+    std::unique_ptr<Painter> mpainter 
         (painter.createTexturePainter(mTexture.get()));
     Color white;
     white.parse( "white" );

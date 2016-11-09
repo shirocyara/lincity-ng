@@ -45,20 +45,20 @@ AC_PROG_RANLIB
 AC_CHECK_PROGS([XGETTEXT], xgettext)
 AC_CHECK_PROGS([XSLTPROC], xsltproc)
 
-# check if our c++ compiler is gcc3.2 or newer
+# check if our c++ compiler is gcc4.8.1 or newer
 AC_MSG_CHECKING([whether g++ is new enough])
 AC_LANG_PUSH([C++])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [
 #ifndef __GNUC__
 #error no gcc compiler found (__GNUC__ not defined)
 #endif
-#if __GNUC__ < 3 || (__GNUC__ == 3 && __GNUC__ < 2)
-#error gcc compiler too old. Need at least version 3.2.0
+#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 8) || (__GNUC__ == 4 && __GNUC_MINOR__ == 8 && __GNUC_PATCHLEVEL__ < 1)
+#error gcc compiler too old. Need at least version 4.8.1
 #endif
 ])],[AC_MSG_RESULT(yes)], [
 	AC_MSG_RESULT(no)
 	AC_MSG_ERROR([
-Error: Your gcc version is too old. Lincity-ng needs at least gcc 3.2.0.
+Error: Your gcc version is too old. Lincity-ng needs at least gcc 4.8.1.
 ])])
 AC_LANG_POP([C++])
 

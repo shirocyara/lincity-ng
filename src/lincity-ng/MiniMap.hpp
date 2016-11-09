@@ -76,7 +76,7 @@ private:
     int border;
 
     std::vector<CheckButton*> switchButtons;
-    std::auto_ptr<Texture> mTexture;
+    std::shared_ptr<Texture> mTexture;
     
     int mpsXOld, mpsYOld, mpsStyleOld;
 
