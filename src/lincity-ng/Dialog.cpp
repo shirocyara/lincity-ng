@@ -16,6 +16,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <config.h>
+#include <physfs.h>
 
 #include "Dialog.hpp"
 
@@ -195,7 +196,7 @@ void Dialog::msgDialog( std::string message, std::string extraString){
     if( pos != std::string::npos ){
         filename.replace( pos, 4 ,".xml");
     }
-    std::auto_ptr<Component> myDialogComponent (loadGUIFile( filename ));
+    std::unique_ptr<Component> myDialogComponent (loadGUIFile( filename ));
 
     //set Extra-String
     getParagraph( *myDialogComponent, "ExtraText" )->setText( extraString );
@@ -497,7 +498,7 @@ void Dialog::saveGameStats(){
     if ((s = (char *) malloc (lc_save_dir_len + strlen (LC_SAVE_DIR)
 			      + strlen (RESULTS_FILENAME) + 64)) == 0)
 	malloc_failure ();
-    sprintf (s, "%s%c%s", lc_save_dir, PATH_SLASH, RESULTS_FILENAME);
+    sprintf (s, "%s%s%s", lc_save_dir, PHYSFS_getDirSeparator(), RESULTS_FILENAME);
 
     std::ofstream results( s );
     free( s );

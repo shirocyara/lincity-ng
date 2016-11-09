@@ -4,6 +4,7 @@
  * Lincity is copyright (c) I J Peters 1995-1997, (c) Greg Sharp 1997-2001.
  * ---------------------------------------------------------------------- */
 #include <string.h>             /* XXX: portability issue?  for strcpy */
+#include <physfs.h>
 #include "lcconfig.h"
 #include "lin-city.h"
 #include "engglobs.h"
@@ -588,9 +589,10 @@ struct GROUP main_groups[NUM_OF_GROUPS] = {
 
 void init_types(void)
 {
+	const char *dirsep = PHYSFS_getDirSeparator();
     char png_file[LC_PATH_MAX], txt_file[LC_PATH_MAX];
-    sprintf(png_file, "%s%c%s", opening_path, PATH_SLASH, "icons.png");
-    sprintf(txt_file, "%s%c%s", opening_path, PATH_SLASH, "iconlist.txt");
+    sprintf(png_file, "%s%s%s", opening_path, dirsep, "icons.png");
+    sprintf(txt_file, "%s%s%s", opening_path, dirsep, "iconlist.txt");
 
     load_png_graphics(txt_file, png_file);
 
