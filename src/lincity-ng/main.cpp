@@ -112,17 +112,17 @@ void initPhysfs(const char* argv0)
 
         if(!PHYSFS_setWriteDir(writedir)) {
             std::ostringstream msg;
-            msg << "Failed to use configuration directory '" <<            
+            msg << "Failed to use configuration directory '" <<
                 writedir << "': " << PHYSFS_getLastError();
             delete[] writedir;
             throw std::runtime_error(msg.str());
         }
     }
-    PHYSFS_addToSearchPath(writedir, 0);
+    PHYSFS_mount(writedir, NULL, 0);
 
     // add ~/.lincity for old savegames
     sprintf(writedir, "%s.lincity", userdir);
-    PHYSFS_addToSearchPath(writedir, 1);
+    PHYSFS_mount(writedir, NULL, 1);
     delete[] writedir;
 
   //TODO: add zips later
@@ -141,7 +141,7 @@ void initPhysfs(const char* argv0)
                 const char* d = PHYSFS_getRealDir(*i);
                 char* str = new char[strlen(d) + strlen(dirsep) + l + 1];
                 sprintf(str, "%s%s%s", d, dirsep, *i);
-                PHYSFS_addToSearchPath(str, 1);
+                PHYSFS_mount(str, NULL, 1);
                 delete[] str;
             }
         }
@@ -157,7 +157,7 @@ void initPhysfs(const char* argv0)
     FILE* f = fopen(testfname.c_str(), "r");
     if(f) {
         fclose(f);
-        if(!PHYSFS_addToSearchPath(dir.c_str(), 1)) {
+        if(!PHYSFS_mount(dir.c_str(), NULL, 1)) {
 #ifdef DEBUG
             std::cout << "Warning: Couldn't add '" << dir << 
                 "' to physfs searchpath: " << PHYSFS_getLastError() << "\n";
@@ -183,7 +183,7 @@ void initPhysfs(const char* argv0)
     datadir = APPDATADIR;
 #endif
     
-    if(!PHYSFS_addToSearchPath(datadir.c_str(), 1)) {
+    if(!PHYSFS_mount(datadir.c_str(), NULL, 1)) {
         std::cout << "Couldn't add '" << datadir
             << "' to physfs searchpath: " << PHYSFS_getLastError() << "\n";
     }
