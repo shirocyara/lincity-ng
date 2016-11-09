@@ -1,7 +1,68 @@
 
+Changes in 2.1.0 (09 Nov 2016)
+- Change savepath "appdata" to currentpath in windows
+	src/lincity-ng/main.cpp
+	src/lincity/Makefile.am
+	src/lincity/fileutil.cpp
+	src/lincity/loadsave.h
+
+- Change PATH_SLASH -> PHYSFS_getDirSeparator
+	src/lincity/fileutil.cpp
+	src/lincity/lintypes.cpp
+	src/lincity/loadsave.cpp
+	src/lincity/loadsave.h
+	src/lincity-ng/Dialog.cpp
+
+- Change auto_ptr -> unique_ptr
+	src/gui/Button.cpp
+	src/gui/ComponentFactory.hpp
+	src/gui/ComponentLoader.cpp
+	src/gui/Document.cpp
+	src/gui/Gradient.hpp
+	src/gui/ScrollBar.cpp
+	src/gui/ScrollView.cpp
+	src/gui/TooltipManager.cpp
+	src/gui/Window.cpp
+	src/lincity-ng/CheckButton.cpp
+	src/lincity-ng/Dialog.cpp
+	src/lincity-ng/Game.hpp
+	src/lincity-ng/Help/HelpWindow.cpp
+	src/lincity-ng/main.cpp
+	src/lincity-ng/MainMenu.hpp
+	src/lincity-ng/MiniMap.cpp
+	src/lincity-ng/MiniMap.hpp
+
+- Change auto_ptr -> shared_ptr
+	src/lincity-ng/MiniMap.hpp
+
+- Change static const foo[] = {"bar"} -> static const foo[] = {(char*)"bar"}
+	src/tinygetetxt/findlocale.cpp
+
+- Change PHYSFS_read -> PHYSFS_readBytes
+	src/gui/XmlReader.cpp
+	src/PhysfsStream/PhysfsSDL.cpp
+	src/PhysfsStream/PhysfsStream.cpp
+
+- Change PHYSFS_write -> PHYSFS_writeBytes
+	src/PhysfsStream/PhysfsStream.cpp
+
+- Change PHYSFS_addToSearchPath(newDir, appendToPath) -> PHYSFS_mount(newDir, NULL, appendToPath)
+	src/lincity-ng/main.cpp
+
+- Change PHYSFS_isDirectory( filename ) -> PHYSFS_Stat statbuf; PHYSFS_stat( filename , &statbuf); statbuf.filetype == PHYSFS_FILETYPE_DIRECTORY
+	src/lincity-ng/Game.cpp
+	src/lincity-ng/MainMenu.cpp
+	src/lincity-ng/Sound.cpp
+
+- Change PHYSFS_getLastModTime( filename ) -> PHYSFS_Stat statbuf; PHYSFS_stat( filename , &statbuf); statbuf.modtime
+	/src/lincity-ng/MainMenu.cpp
+
+
+Changes in 2.0.0 (06 Nov 2016)
+- Add contrib/win32/lincity-ng.rc for Windows
+
+- Update src/lincity/fileutil.cpp for mingw64
 < #ifdef _MSC_VER
 ---
 > #if defined(_MSC_VER) || defined(__MINGW64__)
-
-	src/lincity/fileutil.cpp
 

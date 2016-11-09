@@ -147,63 +147,67 @@ void MainMenu::fillNewGameMenu()
 
 void MainMenu::fillLoadMenu( bool save /*= false*/ )
 {
-    const std::string buttonNames[]={"File0","File1","File2","File3","File4","File5"};
-  
-    char** rc = PHYSFS_enumerateFiles("/");
+	const std::string buttonNames[]={"File0","File1","File2","File3","File4","File5"};
 
-    char* curfile;
-    CheckButton *button;
+	char** rc = PHYSFS_enumerateFiles("/");
+	PHYSFS_Stat statbuf;
 
-    for(int i=0;i<6;i++) {
-    	char* recentfile = NULL;
-        PHYSFS_sint64 t = 0;
+	char* curfile;
+	CheckButton *button;
 
-        std::stringstream filestart;
-        filestart << i+1 << "_";
-        if( save ){
-            button = getCheckButton(*saveGameMenu.get(),buttonNames[i]);
-        } else {
-            button = getCheckButton(*loadGameMenu.get(),buttonNames[i]);
-        }
-        //make sure Button is connected only once 
-        button->clicked.clear(); 
-        if( save )
-            button->clicked.connect(makeCallback(*this,&MainMenu::selectSaveGameButtonClicked));
-        else {
-            button->clicked.connect(makeCallback(*this,&MainMenu::selectLoadGameButtonClicked));
-        }
-        for(char** i = rc; *i != 0; i++){
-            curfile = *i;
-            if(std::string( curfile ).find( filestart.str() ) == 0 ) {
-                // && !( curfile->d_type & DT_DIR  ) ) is not portable. So
-                // don't create a directoy named 2_ in a savegame-directory or
-                // you can no longer load from slot 2.
-    	        if (t == 0) {
-                    recentfile = curfile;
-                    t = PHYSFS_getLastModTime(recentfile);
-              } else {
-                    if (PHYSFS_getLastModTime(curfile) > t) {
+	for(int i=0;i<6;i++) {
+		char* recentfile = NULL;
+		PHYSFS_sint64 t = 0;
+
+		std::stringstream filestart;
+		filestart << i+1 << "_";
+		if( save ){
+			button = getCheckButton(*saveGameMenu.get(),buttonNames[i]);
+		} else {
+			button = getCheckButton(*loadGameMenu.get(),buttonNames[i]);
+		}
+		//make sure Button is connected only once 
+		button->clicked.clear(); 
+		if( save )
+			button->clicked.connect(makeCallback(*this,&MainMenu::selectSaveGameButtonClicked));
+		else {
+			button->clicked.connect(makeCallback(*this,&MainMenu::selectLoadGameButtonClicked));
+		}
+		for(char** i = rc; *i != 0; i++){
+			curfile = *i;
+			if(std::string( curfile ).find( filestart.str() ) == 0 ) {
+				// && !( curfile->d_type & DT_DIR  ) ) is not portable. So
+				// don't create a directoy named 2_ in a savegame-directory or
+				// you can no longer load from slot 2.
+				if (t == 0) {
+					recentfile = curfile;
+					PHYSFS_stat(recentfile, &statbuf);
+					t = statbuf.modtime;
+				} else {
+					PHYSFS_stat(curfile, &statbuf);
+					if (statbuf.modtime > t) {
 #ifdef DEBUG
-                        fprintf(stderr," %s is more recent than previous %s\n",
-                                          curfile, recentfile);
+						fprintf(stderr," %s is more recent than previous %s\n", curfile, recentfile);
 #endif
-                        recentfile = curfile;
-                        t = PHYSFS_getLastModTime(recentfile);
-                    }
-                }
-            }
-        }
+						recentfile = curfile;
+						PHYSFS_stat(recentfile, &statbuf);
+						t = statbuf.modtime;
+					}
+				}
+			}
+		}
+
 #ifdef DEBUG
-        fprintf(stderr,"Most recent file: %s\n\n",recentfile);
+		fprintf(stderr,"Most recent file: %s\n\n",recentfile);
 #endif
 
-        if(t != 0) {
-            std::string f= recentfile;
-            button->setCaptionText(f);
-        } else {
-            button->setCaptionText(_("empty"));
-        }
-    }
+		if(t != 0) {
+			std::string f= recentfile;
+			button->setCaptionText(f);
+		} else {
+			button->setCaptionText(_("empty"));
+		}
+	}
 }
 
 void
