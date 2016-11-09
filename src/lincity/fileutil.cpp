@@ -211,6 +211,7 @@ int file_exists(char *filename)
 void find_libdir(void)
 {
 	const char searchfile[] = "Colour.pal";
+	const char *dirsep = PHYSFS_getDirSeparator();
 	char *home_dir, *cwd;
 	char cwd_buf[LC_PATH_MAX];
 	char filename_buf[LC_PATH_MAX];
@@ -226,7 +227,7 @@ void find_libdir(void)
 	/* Check 2: current working directory */
 	cwd = getcwd(cwd_buf, LC_PATH_MAX);
 	if (cwd) {
-		snprintf(filename_buf, LC_PATH_MAX, "%s%c%s%c%s", cwd_buf, PATH_SLASH, "data", PATH_SLASH, searchfile);
+		snprintf(filename_buf, LC_PATH_MAX, "%s%s%s%s%s", cwd_buf, dirsep, "data", dirsep, searchfile);
 		if (file_exists(filename_buf)) {
 			strncpy(LIBDIR, cwd_buf, LC_PATH_MAX);
 			return;
@@ -247,6 +248,7 @@ void find_libdir(void)
 void find_libdir(void)
 {
     const char searchfile[] = "colour.pal";
+	const char *dirsep = PHYSFS_getDirSeparator();
     char *home_dir, *cwd;
     char cwd_buf[LC_PATH_MAX];
     char filename_buf[LC_PATH_MAX];
@@ -254,7 +256,7 @@ void find_libdir(void)
     /* Check 1: environment variable */
     home_dir = getenv("LINCITY_HOME");
     if (home_dir) {
-        snprintf(filename_buf, LC_PATH_MAX, "%s%c%s", home_dir, PATH_SLASH, searchfile);
+        snprintf(filename_buf, LC_PATH_MAX, "%s%s%s", home_dir, dirsep, searchfile);
         if (file_exists(filename_buf)) {
             strncpy(LIBDIR, home_dir, LC_PATH_MAX);
             return;
@@ -264,14 +266,14 @@ void find_libdir(void)
     /* Check 2: current working directory */
     cwd = getcwd(cwd_buf, LC_PATH_MAX);
     if (cwd) {
-        snprintf(filename_buf, LC_PATH_MAX, "%s%c%s", cwd_buf, PATH_SLASH, searchfile);
+        snprintf(filename_buf, LC_PATH_MAX, "%s%s%s", cwd_buf, dirsep, searchfile);
         if (file_exists(filename_buf)) {
             strncpy(LIBDIR, cwd_buf, LC_PATH_MAX);
             return;
         }
     }
 
-    snprintf(filename_buf, LC_PATH_MAX, "%s%c%s", DEFAULT_LIBDIR, PATH_SLASH, searchfile);
+    snprintf(filename_buf, LC_PATH_MAX, "%s%s%s", DEFAULT_LIBDIR, dirsep, searchfile);
     if (file_exists(filename_buf)) {
         strncpy(LIBDIR, DEFAULT_LIBDIR, LC_PATH_MAX);
         return;
@@ -343,6 +345,7 @@ void find_localized_paths(void)
     int messages_done = 0;
     int help_done = 0;
 
+	const char *dirsep = PHYSFS_getDirSeparator();
     const char *intl_suffix = "";
     char intl_lang[128];
 
@@ -354,15 +357,15 @@ void find_localized_paths(void)
 #endif
     debug_printf((char*)"GUESS 1 -- intl_suffix is %s\n", intl_suffix);
     if (strcmp(intl_suffix, "C") && strcmp(intl_suffix, "")) {
-        snprintf(message_path, sizeof(message_path), "%s%c%s%c%s%c", LIBDIR,
-                 PATH_SLASH, "messages", PATH_SLASH, intl_suffix, PATH_SLASH);
+        snprintf(message_path, sizeof(message_path), "%s%s%s%s%s%s", LIBDIR,
+                 dirsep, "messages", dirsep, intl_suffix, dirsep);
         debug_printf((char*)"Trying Message Path %s\n", message_path);
         if (directory_exists(message_path)) {
             debug_printf((char*)"Set Message Path %s\n", message_path);
             messages_done = 1;
         }
-        snprintf(help_path, sizeof(help_path), "%s%c%s%c%s%c", LIBDIR, PATH_SLASH,
-                 "help", PATH_SLASH, intl_suffix, PATH_SLASH);
+        snprintf(help_path, sizeof(help_path), "%s%s%s%s%s%s", LIBDIR, dirsep,
+                 "help", dirsep, intl_suffix, dirsep);
         debug_printf((char*)"Trying Help Path %s\n", help_path);
         if (directory_exists(help_path)) {
             debug_printf((char*)"Set Help Path %s\n", help_path);
@@ -380,7 +383,7 @@ void find_localized_paths(void)
     debug_printf((char*)"GUESS 2 -- intl_suffix is %s\n", intl_suffix);
     if (strcmp(intl_suffix, "C") && strcmp(intl_suffix, "")) {
         if (!messages_done) {
-            sprintf(message_path, "%s%c%s%c%s%c", LIBDIR, PATH_SLASH, "messages", PATH_SLASH, intl_suffix, PATH_SLASH);
+            sprintf(message_path, "%s%s%s%s%s%s", LIBDIR, dirsep, "messages", dirsep, intl_suffix, dirsep);
             debug_printf((char*)"Trying Message Path %s\n", message_path);
             if (directory_exists(message_path)) {
                 debug_printf((char*)"Set Message Path %s\n", message_path);
@@ -388,7 +391,7 @@ void find_localized_paths(void)
             }
         }
         if (!help_done) {
-            sprintf(help_path, "%s%c%s%c%s%c", LIBDIR, PATH_SLASH, "help", PATH_SLASH, intl_suffix, PATH_SLASH);
+            sprintf(help_path, "%s%s%s%s%s%s", LIBDIR, dirsep, "help", dirsep, intl_suffix, dirsep);
             debug_printf((char*)"Trying Help Path %s\n", help_path);
             if (directory_exists(help_path)) {
                 debug_printf((char*)"Set Help Path %s\n", help_path);
@@ -401,57 +404,58 @@ void find_localized_paths(void)
 
     /* Finally, settle for default English messages */
     if (!messages_done) {
-        sprintf(message_path, "%s%c%s%c", LIBDIR, PATH_SLASH, "messages", PATH_SLASH);
+        sprintf(message_path, "%s%s%s%s", LIBDIR, dirsep, "messages", dirsep);
         debug_printf((char*)"Settling for message Path %s\n", message_path);
     }
     if (!help_done) {
-        sprintf(help_path, "%s%c%s%c", LIBDIR, PATH_SLASH, "help", PATH_SLASH);
+        sprintf(help_path, "%s%s%s%s", LIBDIR, dirsep, "help", dirsep);
         debug_printf((char*)"Settling for help Path %s\n", help_path);
     }
 }
 
 void init_path_strings(void)
 {
+	const char *dirsep = PHYSFS_getDirSeparator();
     find_libdir();
     //TODO: use, remove unused vars.
 #if defined (WIN32)
-	const char* homedir = PHYSFS_getBaseDir();
+	const char *homedir = PHYSFS_getBaseDir();
 #else
-	const char* homedir = PHYSFS_getPrefDir("Lincity-NG","lincity-ng");
+	const char *homedir = PHYSFS_getPrefDir("Lincity-NG","lincity-ng");
 #endif
 
     /* Various dirs and files */
     lc_save_dir_len = strlen(homedir) + strlen(LC_SAVE_DIR) + 1;
     if ((lc_save_dir = (char *)malloc(lc_save_dir_len + 1)) == 0)
         malloc_failure();
-    sprintf(lc_save_dir, "%s%c%s", homedir, PATH_SLASH, LC_SAVE_DIR);
-    sprintf(colour_pal_file, "%s%c%s", LIBDIR, PATH_SLASH, "colour.pal");
-    sprintf(opening_path, "%s%c%s", LIBDIR, PATH_SLASH, "opening");
+    sprintf(lc_save_dir, "%s%s", homedir, LC_SAVE_DIR);
+    sprintf(colour_pal_file, "%s%s%s", LIBDIR, dirsep, "colour.pal");
+    sprintf(opening_path, "%s%s%s", LIBDIR, dirsep, "opening");
 #if defined (WIN32)
-    sprintf(opening_pic, "%s%c%s", opening_path, PATH_SLASH, "open.tga");
+    sprintf(opening_pic, "%s%s%s", opening_path, dirsep, "open.tga");
 #else
-    sprintf(opening_pic, "%s%c%s", opening_path, PATH_SLASH, "open.tga.gz");
+    sprintf(opening_pic, "%s%s%s", opening_path, dirsep, "open.tga.gz");
 #endif
-    sprintf(graphic_path, "%s%c%s%c", LIBDIR, PATH_SLASH, "icons", PATH_SLASH);
-    sprintf(lincityrc_file, "%s%c%s", homedir, PATH_SLASH, LINCITYRC_FILENAME);
+    sprintf(graphic_path, "%s%s%s%s", LIBDIR, dirsep, "icons", dirsep);
+    sprintf(lincityrc_file, "%s%s", homedir, LINCITYRC_FILENAME);
 
     /* Paths for message & help files, etc */
     find_localized_paths();
 
     /* Font stuff */
-    sprintf(fontfile, "%s%c%s", opening_path, PATH_SLASH, "iso8859-1-8x8.raw");
+    sprintf(fontfile, "%s%s%s", opening_path, dirsep, "iso8859-1-8x8.raw");
 
     /* Temp file for results */
     lc_temp_filename = (char *)malloc(lc_save_dir_len + 16);
     if (lc_temp_filename == 0) {
         malloc_failure();
     }
-    sprintf(lc_temp_filename, "%s%c%s", lc_save_dir, PATH_SLASH, "tmp-file");
+    sprintf(lc_temp_filename, "%s%s%s", lc_save_dir, dirsep, "tmp-file");
 
     /* Path for localization */
 #if defined (ENABLE_NLS)
 #if defined (WIN32)
-    sprintf(lc_textdomain_directory, "%s%c%s", LIBDIR, PATH_SLASH, "locale");
+    sprintf(lc_textdomain_directory, "%s%s%s", LIBDIR, dirsep, "locale");
 #else
     strcpy(lc_textdomain_directory, LOCALEDIR);
 #endif

@@ -3,7 +3,7 @@
 #
 noinst_LIBRARIES = liblincity_lib.a
 AM_CPPFLAGS = -I../ -DDEFAULT_LIBDIR="${appdatadir}"
-LIBS+= ${ICONV_LIBS} ${ZLIB_LIBS}
+LIBS+= ${ICONV_LIBS} ${ZLIB_LIBS} ${PHYSFS_LIBS}
 liblincity_lib_a_SOURCES = \
   engglobs.cpp engine.cpp fileutil.cpp init_game.cpp lc_locale.cpp lclib.cpp lintypes.cpp loadsave.cpp old_ldsvguts.cpp power.cpp simulate.cpp stats.cpp transport.cpp \
   confw32.h engglobs.h engine.h fileutil.h init_game.h lc_locale.h lcconfig.h lclib.h lcstring.h lctypes.h lin-city.h lintypes.h loadsave.h old_ldsvguts.h power.h simulate.h stats.h transport.h \

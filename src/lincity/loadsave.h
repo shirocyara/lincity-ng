@@ -9,11 +9,11 @@
 #define __loadsave_h__
 
 #if defined (WIN32)
-#   define PATH_SLASH '\\'
-#   define PATH_SLASH_STRING "\\"
+#define PATH_SLASH '\\'
+#define PATH_SLASH_STRING "\\"
 #else
-#   define PATH_SLASH '/'
-#   define PATH_SLASH_STRING "/"
+#define PATH_SLASH '/'
+#define PATH_SLASH_STRING "/"
 #endif
 
 #define LC_SAVE_DIR "lincity-ng"

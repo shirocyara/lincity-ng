@@ -81,7 +81,7 @@ AX_PATH_SDL_XXX([mixer], [1.2.2], :, AC_MSG_ERROR([*** SDL_mixer version over 1.
 AX_PATH_SDL_XXX([image], [1.2.1], :, AC_MSG_ERROR([*** SDL_image version over 1.2.1 not found!]))
 AX_PATH_SDL_XXX([ttf],   [2.0.8], :, AC_MSG_ERROR([*** SDL_ttf version over 2.0.8 not found!]))
 AX_PATH_SDL_XXX([gfx],   [2.0.13],:, AC_MSG_ERROR([*** SDL_gfx version over 2.0.13 not found!]))
-AC_CHECK_LIB([physfs], [PHYSFS_init], AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([Please install physfs >= 1.0]))
+AC_CHECK_LIB([physfs], [PHYSFS_stat], AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([Please install physfs >= 2.1]))
 
 #----------------------------------------------------------------------------
 # Checks for header files.
