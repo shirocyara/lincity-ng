@@ -147,7 +147,7 @@ esac
 RES_FILE=""
 AS_CASE([$host_os],[mingw*], [
   CXXFLAGS+=" -static-libgcc -static-libstdc++"
-  RES_FILE="${ac_pwd}/contrib/win32/lincity-ng.res"
+  RES_FILE="../../contrib/win32/lincity-ng.res"
 #  LIBS="$LIBS -lws2_32 -lpsapi -liphlpapi -lshell32 -luserenv -luser32"
 ])
 AC_SUBST([RES_FILE])
