@@ -81,18 +81,20 @@ Gradient::parse(XmlReader& reader)
 void
 Gradient::resize(float width, float height)
 {
-    float w;
-    if(direction == LEFT_RIGHT)
-        w = width;
-    else if(direction == TOP_BOTTOM)
-        w = height;
-    else
-        assert(false);
-    
-    float dr = ((float) to.r - (float) from.r) / w;
-    float dg = ((float) to.g - (float) from.g) / w;
-    float db = ((float) to.b - (float) from.b) / w;
-    float da = ((float) to.a - (float) from.a) / w;
+	float w;
+	if(direction == LEFT_RIGHT) {
+		w = width;
+	} else if(direction == TOP_BOTTOM) {
+		w = height;
+	} else {
+		assert(false);
+		return;
+	}
+
+	float dr = ((float) to.r - (float) from.r) / w;
+	float dg = ((float) to.g - (float) from.g) / w;
+	float db = ((float) to.b - (float) from.b) / w;
+	float da = ((float) to.a - (float) from.a) / w;
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     SDL_Surface* surface = SDL_CreateRGBSurface(SDL_SWSURFACE,
