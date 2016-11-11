@@ -621,7 +621,8 @@ static void sort_by_altitude(int n, int *tabx, int *taby)
 
 static void new_setup_one_river(int num_river, int c, int *colx, int *coly, int t, int *topx, int *topy, int l, int *lakx, int *laky)
 {
-    int x, y, xx, yy, alt, alt_max;
+	/* int x, y, xx, yy, alt, alt_max; */
+	int x, y, xx, yy, alt;
 
     /* find a place in altitude near top */
     xx = topx[t - num_river] + (1 + rand() % 2) * di[rand() % 8];
@@ -633,7 +634,7 @@ static void new_setup_one_river(int num_river, int c, int *colx, int *coly, int 
         yy =  topy[t - num_river];
 
     set_river_tile(xx,yy);
-    alt_max = ALT(xx, yy);
+	/* alt_max = ALT(xx, yy); */
 
     /* follow most important slope and go downward */
     do {
