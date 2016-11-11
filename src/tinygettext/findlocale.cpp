@@ -421,30 +421,28 @@ static int num_primary_to_code =
 static int num_both_to_code =
   sizeof(both_to_code) / sizeof(*both_to_code);
 
-static const int
-lcid_to_fl(LCID lcid,
-           FL_Locale *rtn) {
-  LANGID langid       = LANGIDFROMLCID(lcid);
-  LANGID primary_lang = PRIMARYLANGID(langid);
+static int lcid_to_fl(LCID lcid, FL_Locale *rtn) {
+	LANGID langid       = LANGIDFROMLCID(lcid);
+	LANGID primary_lang = PRIMARYLANGID(langid);
 #if 0
-  LANGID sub_lang     = SUBLANGID(langid);
+	LANGID sub_lang     = SUBLANGID(langid);
 #endif
-  int i;
-  /* try to find an exact primary/sublanguage combo that we know about */
-  for (i=0; i<num_both_to_code; ++i) {
-    if (both_to_code[i].id == langid) {
-      accumulate_locstring(both_to_code[i].code, rtn);
-      return 1;
-    }
-  }
-  /* fallback to just checking the primary language id */
-  for (i=0; i<num_primary_to_code; ++i) {
-    if (primary_to_code[i].id == primary_lang) {
-      accumulate_locstring(primary_to_code[i].code, rtn);
-      return 1;
-    }
-  }
-  return 0;
+	int i;
+	/* try to find an exact primary/sublanguage combo that we know about */
+	for (i=0; i<num_both_to_code; ++i) {
+		if (both_to_code[i].id == langid) {
+			accumulate_locstring(both_to_code[i].code, rtn);
+			return 1;
+		}
+	}
+	/* fallback to just checking the primary language id */
+	for (i=0; i<num_primary_to_code; ++i) {
+		if (primary_to_code[i].id == primary_lang) {
+			accumulate_locstring(primary_to_code[i].code, rtn);
+			return 1;
+		}
+	}
+	return 0;
 }
 #endif
 
