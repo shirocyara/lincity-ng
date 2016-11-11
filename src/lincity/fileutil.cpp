@@ -212,7 +212,7 @@ void find_libdir(void)
 {
 	const char searchfile[] = "Colour.pal";
 	const char *dirsep = PHYSFS_getDirSeparator();
-	char *home_dir, *cwd;
+	char *cwd;
 	char cwd_buf[LC_PATH_MAX];
 	char filename_buf[LC_PATH_MAX];
 
