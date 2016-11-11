@@ -57,7 +57,7 @@ static int funcRead(struct SDL_RWops* context, void* ptr, int size, int maxnum)
     PHYSFS_file* file = (PHYSFS_file*) context->hidden.unknown.data1;
 
     int res = PHYSFS_readBytes(file, ptr, (size * maxnum));
-    return res;
+    return res / size;
 }
 
 static int funcClose(struct SDL_RWops* context)
@@ -72,20 +72,20 @@ static int funcClose(struct SDL_RWops* context)
 
 SDL_RWops* getPhysfsSDLRWops(const std::string& filename)
 {
-    PHYSFS_file* file = (PHYSFS_file*) PHYSFS_openRead(filename.c_str());
-    if(!file) {
-        std::stringstream msg;
-        msg << "Couldn't open '" << filename << "': "
-            << PHYSFS_getLastError();
-        throw std::runtime_error(msg.str());
-    }
-    
-    SDL_RWops* ops = new SDL_RWops();
-    ops->type = 0;
-    ops->hidden.unknown.data1 = file;
-    ops->seek = funcSeek;
-    ops->read = funcRead;
-    ops->write = 0;
-    ops->close = funcClose;
-    return ops;
+	PHYSFS_file* file = (PHYSFS_file*) PHYSFS_openRead(filename.c_str());
+	if(!file) {
+		std::stringstream msg;
+		msg << "Couldn't open '" << filename << "': "
+		    << PHYSFS_getLastError();
+		throw std::runtime_error(msg.str());
+	}
+
+	SDL_RWops* ops = new SDL_RWops();
+	ops->type = 0;
+	ops->hidden.unknown.data1 = file;
+	ops->seek = funcSeek;
+	ops->read = funcRead;
+	ops->write = 0;
+	ops->close = funcClose;
+	return ops;
 }

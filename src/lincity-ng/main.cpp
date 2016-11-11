@@ -461,7 +461,7 @@ int main(int argc, char** argv)
         std::cout << "Starting " << PACKAGE_NAME << " (version " << PACKAGE_VERSION << ")...\n";
 #else
         std::cout << "Starting " << PACKAGE_NAME << " (version " << PACKAGE_VERSION << ") in Debug Mode...\n";
-#endif                                                     
+#endif
         initPhysfs(argv[0]);
         dictionaryManager = new TinyGetText::DictionaryManager();
         dictionaryManager->set_charset("UTF-8");
@@ -470,22 +470,22 @@ int main(int argc, char** argv)
         
 #ifndef DEBUG
     } catch(std::exception& e) {
-        std::cerr << "Unexpected exception: " << e.what() << "\n";        
+        std::cerr << "Unexpected exception: " << e.what() << "\n";
         return 1;
     } catch(...) {
         std::cerr << "Unexpected exception.\n";
         return 1;
-    }                                                                     
+    }
 #endif
-    parseCommandLine(argc, argv); // Do not use getConfig() before parseCommandLine.
-    
-    fast_time_for_year = getConfig()->quickness;
-    fprintf(stderr," fast = %i\n", fast_time_for_year);
-   
 // in debug mode we want a backtrace of the exceptions so we don't catch them
 #ifndef DEBUG
     try {
 #endif
+		parseCommandLine(argc, argv); // Do not use getConfig() before parseCommandLine.
+
+		fast_time_for_year = getConfig()->quickness;
+		fprintf(stdout," fast = %i\n", fast_time_for_year);
+
         xmlInitParser ();
         std::unique_ptr<Sound> sound; 
         sound.reset(new Sound()); 

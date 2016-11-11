@@ -45,70 +45,72 @@ Sound::soundThread(void* ptr)
     sound->loadWaves();
     return 0;
 }
-        
+
 void
 Sound::loadWaves() {
-    //Load Waves
-    std::string filename;
-    std::string directory = "sounds/";
-    std::string fullname;
-    Mix_Chunk *chunk;
-    SDL_RWops* file;
-    char **rc = PHYSFS_enumerateFiles( directory.c_str() );
+	//Load Waves
+	std::string filename;
+	//PHYSFS_getDirSeparator()
+	std::string directory = "sounds";
+	std::string fullname;
+	Mix_Chunk *chunk;
+	SDL_RWops* file;
+	char **rc = PHYSFS_enumerateFiles( directory.c_str() );
+	directory += "/";
 	PHYSFS_Stat statbuf;
-    char **i;
-    for (i = rc; *i != NULL; i++) {
-        fullname = directory;
-        fullname.append( *i );
-        filename.assign( *i );
+	char **i;
+	for (i = rc; *i != NULL; i++) {
+		fullname = directory;
+		fullname.append( *i );
+		filename.assign( *i );
 
 		PHYSFS_stat(fullname.c_str(), &statbuf);
-		if(statbuf.filetype == PHYSFS_FILETYPE_DIRECTORY)
-            continue;
-            
-        try {        
-            file = getPhysfsSDLRWops( fullname.c_str() );
-            chunk = Mix_LoadWAV_RW( file, 1);
-            if(!chunk) {
-                std::stringstream msg;
-                msg << "Couldn't read soundfile '" << fullname
-                    << "': " << SDL_GetError();
-                throw std::runtime_error(msg.str());
-            }
-
-            std::string idName = getIdName( filename );
-            waves.insert( std::pair<std::string,Mix_Chunk*>(idName, chunk) );
-        } catch(std::exception& e) {
-            std::cerr << "Error: " << e.what() << "\n";
-        }
-    }
-    PHYSFS_freeList(rc);
+		if(statbuf.filetype == PHYSFS_FILETYPE_DIRECTORY) {
+			continue;
+		}
+		try {
+			file = getPhysfsSDLRWops( fullname.c_str() );
+			chunk = Mix_LoadWAV_RW( file, 1);
+			if(!chunk) {
+				std::stringstream msg;
+				msg << "Couldn't read soundfile '" << fullname
+				    << "': " << SDL_GetError();
+				throw std::runtime_error(msg.str());
+			}
+			std::string idName = getIdName( filename );
+			/* waves.insert( std::pair<std::string,Mix_Chunk*>(idName, chunk) ); */
+			waves.emplace(idName, chunk);
+		} catch(std::exception& e) {
+			std::cerr << "Error: " << e.what() << "\n";
+		}
+	}
+	PHYSFS_freeList(rc);
 }
 
 Sound::Sound()
     : currentMusic(0)
 {
-    assert( soundPtr == 0);
-    soundPtr = this;
-    loaderThread = 0;
+	assert( soundPtr == 0);
+	soundPtr = this;
+	loaderThread = 0;
 
-    //Load Sound
-    audioOpen = false;
-    /* Open the audio device */
-    if (Mix_OpenAudio( MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-        fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
-        return;
-    } else {
-        audioOpen = true;
-        loaderThread = SDL_CreateThread(soundThread, this);
-    }
+	//Load Sound
+	audioOpen = false;
+	/* Open the audio device */
+	if (Mix_OpenAudio( MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+		fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
+		return;
+	} else {
+		audioOpen = true;
+		loaderThread = SDL_CreateThread(soundThread, this);
+	}
 
-    setMusicVolume(getConfig()->musicVolume);
-    setSoundVolume(getConfig()->soundVolume);
+	setMusicVolume(getConfig()->musicVolume);
+	setSoundVolume(getConfig()->soundVolume);
 
-    // for now...
-    //playMusic("01 - pronobozo - lincity.ogg");
-    playMusic( getConfig()->playSongName );
+	// for now...
+	//playMusic("01 - pronobozo - lincity.ogg");
+	playMusic( getConfig()->playSongName );
 }
 
 Sound::~Sound()
@@ -140,26 +142,26 @@ Sound::~Sound()
  */
 void
 Sound::playSound(const std::string& name) {
-    if( !getConfig()->soundEnabled ){
-        return;
-    }
-    if( !audioOpen ){
-        return;
-    }
+	if( !getConfig()->soundEnabled ){
+		return;
+	}
+	if( !audioOpen ){
+		return;
+	}
 
-    chunks_t::size_type count = waves.count( name );
-    if ( count == 0 ) {
-        std::cout << "Couldn't find audio file '" << name << "'\n";
-        return;
-    }
+	chunks_t::size_type count = waves.count( name );
+	if ( count == 0 ) {
+		std::cout << "Couldn't find audio file '" << name << "'\n";
+		return;
+	}
 
-    chunks_t::iterator it = waves.find(name);
-    for (int i = rand() % count; i > 0; i--) {
-        it++;
-    }
-    
-    Mix_Volume( 0, getConfig()->soundVolume );
-    Mix_PlayChannel( 0, it->second, 0 ); 
+	chunks_t::iterator it = waves.find(name);
+	for (int i = rand() % count; i > 0; i--) {
+		it++;
+	}
+
+	Mix_Volume( 0, getConfig()->soundVolume );
+	Mix_PlayChannel( 0, it->second, 0 ); 
 }
 
 /*
