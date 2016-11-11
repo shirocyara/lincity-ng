@@ -163,19 +163,22 @@ int is_allowed_here(int x, int y, short type, short msg)
         }
         break;
 
-    //Tip
-    /* Don't build a tip if there has already been one.
-     * This is marked permanently by setting the ore reserve to double of (max) ORE_RESERVE at tip build time
-     */
-    case GROUP_TIP:
-        for (i = 0; i < size; i++)
-            for (j = 0; j < size; j++)
-                if (MP_INFO(x + i, y + j).ore_reserve > ORE_RESERVE) {
-                    if (msg)
-                        ok_dial_box("warning.mes", BAD, _("You can't build a tip here: this area was once a landfill"));
-                    return false;
-                }
-	    break;
+	//Tip
+	/* Don't build a tip if there has already been one.
+	 * This is marked permanently by setting the ore reserve to double of (max) ORE_RESERVE at tip build time
+	 */
+	case GROUP_TIP:
+		for (i = 0; i < size; i++) {
+			for (j = 0; j < size; j++) {
+				if (MP_INFO(x + i, y + j).ore_reserve > ORE_RESERVE) {
+					if (msg) {
+						ok_dial_box("warning.mes", BAD, _("You can't build a tip here: this area was once a landfill"));
+					}
+					return false;
+				}
+			}
+		}
+		break;
     //Oremine
     /* Don't allow new mines on old mines or old tips */
     /* GCS: mines over old mines is OK if there is enough remaining 
