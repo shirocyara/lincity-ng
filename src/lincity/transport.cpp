@@ -195,7 +195,7 @@ void general_transport(int x, int y, int max_waste)
         }
 
         *base = tot - (LC + RC + UC + DC);
-        *base++; // loop on address of int_"i"
+    	(*base)++; // loop on address of int_"i"
     }
 
     /*

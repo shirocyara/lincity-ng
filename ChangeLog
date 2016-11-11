@@ -1,5 +1,5 @@
 
-Changes in 2.1.0 (09 Nov 2016)
+Changes in 2.1.0 (11 Nov 2016)
 - Change savepath "appdata" to currentpath in windows
 	src/lincity-ng/main.cpp
 	src/lincity/Makefile.am
@@ -56,6 +56,8 @@ Changes in 2.1.0 (09 Nov 2016)
 
 - Change PHYSFS_getLastModTime( filename ) -> PHYSFS_Stat statbuf; PHYSFS_stat( filename , &statbuf); statbuf.modtime
 	/src/lincity-ng/MainMenu.cpp
+
+- Fix some Warning in compile
 
 
 Changes in 2.0.0 (06 Nov 2016)

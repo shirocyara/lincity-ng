@@ -84,10 +84,10 @@ private:
     Desktop* currentMenu;
     
     bool running;
-    MainState quitState;           
+    MainState quitState;
     int slotNr;
     
-    std::string mFilename;    
+    std::string mFilename;
     std::string baseName;
     static const Uint32 doubleClickTime = 1000;
     Uint32 lastClickTick;

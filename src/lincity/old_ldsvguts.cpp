@@ -112,7 +112,7 @@ void upgrade_to_v2 (void);
 
 void load_city_old(char *cname)
 {
-    unsigned long q;
+    /* unsigned long q; */
     int i, x, y, n, p;
     unsigned int z;
     int num_pbars, pbar_data_size;
@@ -158,7 +158,7 @@ void load_city_old(char *cname)
     init_inventory();
 
     print_time_for_year();
-    q = (unsigned long)sizeof(Map_Point_Info);
+    /* q = (unsigned long)sizeof(Map_Point_Info); */
     prog_box(_("Loading scene"), 0);
 
     for (x = 0; x < WORLD_SIDE_LEN; x++) {

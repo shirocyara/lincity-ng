@@ -325,49 +325,48 @@ void flipScreenBuffer()
 
 void mainLoop()
 {
-    std::unique_ptr<MainMenu> menu;
-    std::unique_ptr<Game> game;
-    MainState state = MAINMENU;
-    MainState nextstate;
-    
-    //we need the game-gui to set all states while loading a savegame
-    if(game.get() == 0)
-        game.reset(new Game());
-    while(!LCPBarInstance){//wait until PBars exist so they can be initalized
-        printf(".");
-        SDL_Delay(100);
-    }
-    initLincity();
+	std::unique_ptr<MainMenu> menu;
+	std::unique_ptr<Game> game;
+	MainState state = MAINMENU;
+	MainState nextstate;
 
-    while(state != QUIT) {
-        switch(state) {
-            case MAINMENU:
-                {
-                    if(menu.get() == 0)
-                        menu.reset(new MainMenu());
-                    nextstate = menu->run();
-                }
-                break;
-            case INGAME:
-                {
-                    if(game.get() == 0)
-                        game.reset(new Game());
-                    nextstate = game->run();
-                    if(menu.get() == 0)
-                        menu.reset(new MainMenu());
-                    menu->gotoMainMenu();
-                }
-                break;
-            case RESTART:
-                restart = true;
-                nextstate = QUIT;
-                break;
-            default:
-                assert(false);
-        }
-        
-        state = nextstate;
-    }
+	//we need the game-gui to set all states while loading a savegame
+	if(game.get() == 0)
+		game.reset(new Game());
+	while(!LCPBarInstance){//wait until PBars exist so they can be initalized
+		printf(".");
+		SDL_Delay(100);
+	}
+	initLincity();
+
+	while(state != QUIT) {
+		switch(state) {
+		case MAINMENU:
+			if(menu.get() == 0) {
+				menu.reset(new MainMenu());
+			}
+			nextstate = menu->run();
+			break;
+		case INGAME:
+			if(game.get() == 0) {
+				game.reset(new Game());
+			}
+			nextstate = game->run();
+			if(menu.get() == 0) {
+				menu.reset(new MainMenu());
+			}
+			menu->gotoMainMenu();
+			break;
+		case RESTART:
+			restart = true;
+			nextstate = QUIT;
+			break;
+		default:
+			assert(false);
+		}
+
+		state = nextstate;
+	}
 }
 
 void parseCommandLine(int argc, char** argv)
