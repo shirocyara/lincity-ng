@@ -27,8 +27,12 @@ from the Author.
 
 */
 
-#ifndef __findlocale_h_
-#define __findlocale_h_
+#ifndef findlocale_h
+#define findlocale_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 typedef const char* FL_Lang;
 typedef const char* FL_Country;

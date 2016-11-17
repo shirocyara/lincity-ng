@@ -15,8 +15,12 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#ifndef __READDIR_HPP__
-#define __READDIR_HPP__
+#ifndef READDIR_HPP
+#define READDIR_HPP
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #if defined(HAVE_DIRENT_H) && defined(HAVE_SYS_TYPES_H)
 #include <dirent.h>

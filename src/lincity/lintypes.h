@@ -3,8 +3,12 @@
  * This file is part of lincity.
  * Lincity is copyright (c) I J Peters 1995-1997, (c) Greg Sharp 1997-2001.
  * ---------------------------------------------------------------------- */
-#ifndef __lintypes_h__
-#define __lintypes_h__
+#ifndef lintypes_h
+#define lintypes_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 int get_group_of_type(short selected_type);
 void set_map_groups(void);

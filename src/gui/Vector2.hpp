@@ -22,8 +22,12 @@
  * @file Vector2.hpp
  */
 
-#ifndef __VECTOR_HPP__
-#define __VECTOR_HPP__
+#ifndef VECTOR_HPP
+#define VECTOR_HPP
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #include <math.h>
 

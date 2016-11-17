@@ -5,7 +5,7 @@
  * Portions copyright (c) Corey Keasling, 2001.
  * ---------------------------------------------------------------------- */
 
-#include "lcconfig.h"
+//#include "lcconfig.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "lcstring.h"

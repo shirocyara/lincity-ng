@@ -20,6 +20,10 @@
 #ifndef HEADER_TINYGETTEXT_H
 #define HEADER_TINYGETTEXT_H
 
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
+
 #include <map>
 #include <vector>
 #include <set>

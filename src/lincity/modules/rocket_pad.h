@@ -5,8 +5,12 @@
  * (c) Corey Keasling, 2004
  * ---------------------------------------------------------------------- */
 
-#ifndef __rocket_pad_h__
-#define __rocket_pad_h__
+#ifndef rocket_pad_h
+#define rocket_pad_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 void do_rocket_pad(int x, int y);
 void launch_rocket(int x, int y);

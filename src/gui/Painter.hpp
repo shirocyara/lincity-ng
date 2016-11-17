@@ -21,8 +21,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * @file Painter.hpp
  */
 
-#ifndef __PAINTER_HPP__
-#define __PAINTER_HPP__
+#ifndef PAINTER_HPP
+#define PAINTER_HPP
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #include <SDL.h>
 #include <vector>

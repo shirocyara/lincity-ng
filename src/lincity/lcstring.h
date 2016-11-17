@@ -3,11 +3,15 @@
  * This file is part of lincity.
  * Lincity is copyright (c) I J Peters 1995-1997, (c) Greg Sharp 1997-2001.
  * ---------------------------------------------------------------------- */
-#ifndef __lcstring_h__
-#define __lcstring_h__
+#ifndef lcstring_h
+#define lcstring_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #include <string.h>
-#ifndef WIN32
+#ifndef _WIN32
 #include <unistd.h>
 #endif
 

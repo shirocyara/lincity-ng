@@ -4,7 +4,7 @@
  * Lincity is copyright (c) I J Peters 1995-1997, (c) Greg Sharp 1997-2002.
  * Portions copyright (c) Corey Keasling, 2000-2002.
  * ---------------------------------------------------------------------- */
-#include "lcconfig.h"
+//#include "lcconfig.h"
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -5,8 +5,12 @@
  * (c) Corey Keasling, 2004
  * ---------------------------------------------------------------------- */
 
-#ifndef __shanty_h__
-#define __shanty_h__
+#ifndef shanty_h
+#define shanty_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 void add_a_shanty(void);
 void remove_a_shanty(int x, int y);

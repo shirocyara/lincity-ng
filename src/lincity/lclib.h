@@ -5,8 +5,12 @@
  * Portions copyright (c) Corey Keasling, 2001.
  * ---------------------------------------------------------------------- */
 
-#ifndef _LCLIB_H
-#define _LCLIB_H
+#ifndef LCLIB_H
+#define LCLIB_H
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 // FIXME: is this necessary to export this?
 extern char *months[];

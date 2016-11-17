@@ -6,9 +6,12 @@
 /* This is the OLD facility, before lincity-NG 1.91 */
 /* Used for reading old games and convert them to new format + data structure */
 
-#ifndef __old_ldsvguts_h__
-#define __old_ldsvguts_h__
+#ifndef old_ldsvguts_h
+#define old_ldsvguts_h
 
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 /* Load corrections if version <= MM_MS_C_VER (max markets/substations) */
 #define MM_MS_C_VER 97

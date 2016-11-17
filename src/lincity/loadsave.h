@@ -5,8 +5,12 @@
 
 /* This is the loading/saving facility */
 
-#ifndef __loadsave_h__
-#define __loadsave_h__
+#ifndef loadsave_h
+#define loadsave_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #define LC_SAVE_DIR "lincity-ng"
 #define LINCITYRC_FILENAME "lincity-NGrc"

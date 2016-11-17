@@ -15,8 +15,12 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#ifndef __PHYSFSSTREAM_HPP__
-#define __PHYSFSSTREAM_HPP__
+#ifndef PHYSFSSTREAM_HPP
+#define PHYSFSSTREAM_HPP
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #include <stdio.h>
 #include <physfs.h>

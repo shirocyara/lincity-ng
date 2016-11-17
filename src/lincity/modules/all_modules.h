@@ -1,6 +1,10 @@
 #ifndef ALL_MODULES_H
 #define ALL_MODULES_H
 
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
+
 #include "blacksmith.h"
 #include "coalmine.h"
 #include "coal_power.h"

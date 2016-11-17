@@ -5,8 +5,12 @@
  * (c) Corey Keasling, 2004
  * ---------------------------------------------------------------------- */
 
-#ifndef __waterwell_h__
-#define __waterwell_h__
+#ifndef waterwell_h
+#define waterwell_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #undef DEBUG_WATERWELL
 

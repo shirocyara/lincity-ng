@@ -5,8 +5,12 @@
  * (c) Corey Keasling, 2004
  * ---------------------------------------------------------------------- */
 
-#ifndef __substation_h__
-#define __substation_h__
+#ifndef substation_h
+#define substation_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 void do_power_substation(int x, int y);
 int add_a_substation(int x, int y);

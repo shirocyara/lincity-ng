@@ -4,8 +4,12 @@
  * Lincity is copyright (c) I J Peters 1995-1997, (c) Greg Sharp 1997-2001.
  * ---------------------------------------------------------------------- */
 
-#ifndef __TRANSPORT_H__
-#define __TRANSPORT_H__
+#ifndef TRANSPORT_H
+#define TRANSPORT_H
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #include "engglobs.h"
 

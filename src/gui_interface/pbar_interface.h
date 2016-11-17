@@ -4,8 +4,12 @@
  * Portions copyright (c) 2001 Corey Keasling.
  * ---------------------------------------------------------------------- */
 
-#ifndef _pbar_h
-#define _pbar_h
+#ifndef pbar_h
+#define pbar_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 //#include "geometry.h"
 

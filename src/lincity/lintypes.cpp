@@ -5,7 +5,7 @@
  * ---------------------------------------------------------------------- */
 #include <string.h>             /* XXX: portability issue?  for strcpy */
 #include <physfs.h>
-#include "lcconfig.h"
+//#include "lcconfig.h"
 #include "lin-city.h"
 #include "engglobs.h"
 #include "lctypes.h"

@@ -15,8 +15,12 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#ifndef __TEXTUREGL_HPP__
-#define __TEXTUREGL_HPP__
+#ifndef TEXTUREGL_HPP
+#define TEXTUREGL_HPP
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #include <SDL_opengl.h>
 #include "gui/Rect2D.hpp"

@@ -5,8 +5,12 @@
  * (c) Corey Keasling, 2004
  * ---------------------------------------------------------------------- */
 
-#ifndef __light_industry_h__
-#define __light_industry_h__
+#ifndef light_industry_h
+#define light_industry_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 void do_industry_l(int x, int y);
 void mps_light_industry(int x, int y);

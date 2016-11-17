@@ -1,5 +1,9 @@
-#ifndef __shared_globals_h__
-#define __shared_globals_h__
+#ifndef shared_globals_h
+#define shared_globals_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 extern int selected_module_cost;
 

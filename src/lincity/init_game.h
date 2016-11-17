@@ -4,8 +4,12 @@
  * see COPYING for license, and CREDITS for authors
  * ----------------------------------------------------------------------
  */
-#ifndef __init_game_h__
-#define __init_game_h__
+#ifndef init_game_h
+#define init_game_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 void clear_game(void);
 void setup_land(void);

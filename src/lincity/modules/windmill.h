@@ -5,8 +5,12 @@
  * (c) Corey Keasling, 2004
  * ---------------------------------------------------------------------- */
 
-#ifndef __windmill_h__
-#define __windmill_h__
+#ifndef windmill_h
+#define windmill_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 void do_windmill(int x, int y);
 void mps_windmill(int x, int y);

@@ -4,8 +4,12 @@
  * Lincity is copyright (c) I J Peters 1995-1997, (c) Greg Sharp 1997-2001.
  * ---------------------------------------------------------------------- */
 
-#ifndef __mps_h__
-#define __mps_h__
+#ifndef mps_h
+#define mps_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 //#include "geometry.h"
 //#include "cliglobs.h"
@@ -66,8 +70,8 @@ void mps_global_housing(void);
 void mps_right (int x, int y);
 
 
-#define _generic_mps
-#ifdef _generic_mps
+#define generic_mps
+#ifdef generic_mps
 #endif
 
 

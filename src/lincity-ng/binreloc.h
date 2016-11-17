@@ -10,8 +10,12 @@
  * more information and how to use this.
  */
 
-#ifndef __BINRELOC_H__
-#define __BINRELOC_H__
+#ifndef BINRELOC_H
+#define BINRELOC_H
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #ifdef __cplusplus
 extern "C" {

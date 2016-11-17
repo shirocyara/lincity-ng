@@ -1,5 +1,9 @@
-#ifndef __GETTEXT_H__
-#define __GETTEXT_H__
+#ifndef GETTEXT_H
+#define GETTEXT_H
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #include "tinygettext/TinyGetText.hpp"
 

@@ -18,8 +18,12 @@
 
 /* When installed, this file is called "iconv.h". */
 
-#ifndef _LIBICONV_H
-#define _LIBICONV_H
+#ifndef LIBICONV_H
+#define LIBICONV_H
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #define _LIBICONV_VERSION 0x0109    /* version number: (major<<8) + minor */
 extern int _libiconv_version;       /* Likewise */

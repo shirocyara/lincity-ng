@@ -3,8 +3,12 @@
  * This file is part of lincity.
  * Lincity is copyright (c) I J Peters 1995-1997, (c) Greg Sharp 1997-2001.
  * ---------------------------------------------------------------------- */
-#ifndef __engglobs_h__
-#define __engglobs_h__
+#ifndef engglobs_h
+#define engglobs_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #include "lin-city.h"
 

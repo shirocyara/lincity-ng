@@ -5,8 +5,12 @@
  * (c) Corey Keasling, 2004
  * ---------------------------------------------------------------------- */
 
-#ifndef __cricket_h__
-#define __cricket_h__
+#ifndef cricket_h
+#define cricket_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 void do_cricket(int x, int y);
 void do_cricket_cover(int x, int y);

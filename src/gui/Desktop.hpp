@@ -21,8 +21,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * @file Desktop.hpp
  */
 
-#ifndef __DESKTOP_HPP__
-#define __DESKTOP_HPP__
+#ifndef DESKTOP_HPP
+#define DESKTOP_HPP
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #include <vector>
 #include "Component.hpp"

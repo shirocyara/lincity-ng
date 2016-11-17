@@ -21,8 +21,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * @file Filter.hpp
  */
 
-#ifndef __FILTER_HPP__
-#define __FILTER_HPP__
+#ifndef FILTER_HPP
+#define FILTER_HPP
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #include <SDL.h>
 

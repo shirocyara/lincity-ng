@@ -5,8 +5,12 @@
  * (c) Corey Keasling, 2004
  * ---------------------------------------------------------------------- */
 
-#ifndef __pottery_h__
-#define __pottery_h__
+#ifndef pottery_h
+#define pottery_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 void do_pottery(int x, int y);
 void mps_pottery(int x, int y);

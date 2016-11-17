@@ -17,8 +17,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 /** simple wrapper around libxml2 xmlreader interface */
 
-#ifndef __XMLREADER_HPP__
-#define __XMLREADER_HPP__
+#ifndef XMLREADER_HPP
+#define XMLREADER_HPP
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #include <libxml/xmlreader.h>
 #include <stdexcept>

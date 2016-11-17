@@ -21,8 +21,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * @file Rect2D.hpp
  */
 
-#ifndef __RECTANGLE_H__
-#define __RECTANGLE_H__
+#ifndef RECTANGLE_H
+#define RECTANGLE_H
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #include <assert.h>
 #include "Vector2.hpp"

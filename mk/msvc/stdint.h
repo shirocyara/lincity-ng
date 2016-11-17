@@ -17,8 +17,12 @@
  */
 
 
-#ifndef _STDINT_H
-#define _STDINT_H
+#ifndef STDINT_H
+#define STDINT_H
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 /* 7.18.1.1  Exact-width integer types */
 typedef signed char int8_t;

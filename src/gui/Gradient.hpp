@@ -21,8 +21,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * @file Gradient.hpp
  */
 
-#ifndef __GRADIENT_HPP__
-#define __GRADIENT_HPP__
+#ifndef GRADIENT_HPP
+#define GRADIENT_HPP
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 #include "Component.hpp"
 #include <memory>

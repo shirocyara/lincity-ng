@@ -5,8 +5,12 @@
  * Portions copyright (c) Corey Keasling, 2000-2002.
  * ---------------------------------------------------------------------- */
 
-#ifndef __stats_h__
-#define __stats_h__
+#ifndef stats_h
+#define stats_h
+
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || _MSC_VER > 1000
+#pragma once
+#endif
 
 /* Statistics, Accumulators and Counters all reside here */
 
