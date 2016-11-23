@@ -7,7 +7,7 @@ void lincity_set_locale(void)
 //    char *localem = NULL;
 
 #if defined (ENABLE_NLS)
-#if defined (WIN32)
+#if defined _WIN32
 	#define MAX_LANG_BUF 1024
 	char *language = NULL;
 	char language_buf[MAX_LANG_BUF];

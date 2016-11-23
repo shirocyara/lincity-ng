@@ -192,7 +192,7 @@ TableLayout::parse(XmlReader& reader)
                     continue;
                 }
                 addChild(component);
-                Cell cell(childs.size() - 1);
+                Cell cell((int)(childs.size() - 1));
                 cell.halign = halign;
                 cell.valign = valign;
                 cell.rowspan = rowspan;
@@ -460,7 +460,7 @@ TableLayout::addComponent(size_t col, size_t row, Component* component)
         throw std::runtime_error("Already a component in this cell.");
     
     addChild(component);
-    cells[row * colproperties.size() + col] = Cell(childs.size()-1);
+    cells[row * colproperties.size() + col] = Cell((int)(childs.size()-1));
 }
 
 IMPLEMENT_COMPONENT_FACTORY(TableLayout);

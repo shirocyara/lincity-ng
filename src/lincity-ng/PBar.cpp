@@ -209,7 +209,7 @@ BarView::parse(XmlReader& reader)
     }
     if(width <= 0 || height <= 0)
         throw std::runtime_error("Width or Height invalid");
-    value=0.7;
+    value=(float)0.7;
 }
 
 void BarView::setValue(float v)

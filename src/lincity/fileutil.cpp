@@ -27,7 +27,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#if defined(_MSC_VER) || defined(__MINGW64__)
+#ifdef _WIN32
 #include <direct.h>
 #include <io.h>
 #endif
@@ -181,7 +181,7 @@ void copy_file(char *f1, char *f2)
 
 int directory_exists(char *dir)
 {
-#if defined (WIN32)
+#if defined _WIN32
     struct stat s;
     if (stat(dir, &s) != 0 || !(s.st_mode & S_IFDIR)) {
         return 0;
@@ -207,7 +207,7 @@ int file_exists(char *filename)
     return 1;
 }
 
-#if defined (WIN32)
+#if defined _WIN32
 void find_libdir(void)
 {
 	const char searchfile[] = "Colour.pal";
@@ -219,7 +219,7 @@ void find_libdir(void)
 	/* Check 1: environment variable */
 	_searchenv(searchfile, "LINCITY_HOME", LIBDIR);
 	if (*LIBDIR != '\0') {
-		int endofpath_offset = strlen(LIBDIR) - strlen(searchfile) - 1;
+		int endofpath_offset = (int)(strlen(LIBDIR) - strlen(searchfile) - 1);
 		LIBDIR[endofpath_offset] = '\0';
 		return;
 	}
@@ -227,7 +227,14 @@ void find_libdir(void)
 	/* Check 2: current working directory */
 	cwd = getcwd(cwd_buf, LC_PATH_MAX);
 	if (cwd) {
+#ifndef _MSC_VER
 		snprintf(filename_buf, LC_PATH_MAX, "%s%s%s%s%s", cwd_buf, dirsep, "data", dirsep, searchfile);
+#else
+		if (_snprintf_s(filename_buf, LC_PATH_MAX, (LC_PATH_MAX - 1), "%s%s%s%s%s", cwd_buf, dirsep, "data", dirsep, searchfile) < 0) {
+			HandleError(_("Error. Can't set LINCITY_HOME"), FATAL);
+			return;
+		}
+#endif
 		if (file_exists(filename_buf)) {
 			strncpy(LIBDIR, cwd_buf, LC_PATH_MAX);
 			return;
@@ -418,20 +425,20 @@ void init_path_strings(void)
 	const char *dirsep = PHYSFS_getDirSeparator();
     find_libdir();
     //TODO: use, remove unused vars.
-#if defined (WIN32)
+#if defined _WIN32
 	const char *homedir = PHYSFS_getBaseDir();
 #else
 	const char *homedir = PHYSFS_getPrefDir("Lincity-NG","lincity-ng");
 #endif
 
     /* Various dirs and files */
-    lc_save_dir_len = strlen(homedir) + strlen(LC_SAVE_DIR) + 1;
+    lc_save_dir_len = (int)(strlen(homedir) + strlen(LC_SAVE_DIR) + 1);
     if ((lc_save_dir = (char *)malloc(lc_save_dir_len + 1)) == 0)
         malloc_failure();
     sprintf(lc_save_dir, "%s%s", homedir, LC_SAVE_DIR);
     sprintf(colour_pal_file, "%s%s%s", LIBDIR, dirsep, "colour.pal");
     sprintf(opening_path, "%s%s%s", LIBDIR, dirsep, "opening");
-#if defined (WIN32)
+#if defined _WIN32
     sprintf(opening_pic, "%s%s%s", opening_path, dirsep, "open.tga");
 #else
     sprintf(opening_pic, "%s%s%s", opening_path, dirsep, "open.tga.gz");
@@ -454,7 +461,7 @@ void init_path_strings(void)
 
     /* Path for localization */
 #if defined (ENABLE_NLS)
-#if defined (WIN32)
+#if defined _WIN32
     sprintf(lc_textdomain_directory, "%s%s%s", LIBDIR, dirsep, "locale");
 #else
     strcpy(lc_textdomain_directory, LOCALEDIR);
@@ -479,11 +486,11 @@ void verify_package(void)
 
 void make_savedir(void)
 {
-#if !defined (WIN32)
+#if !defined _WIN32
     DIR *dp;
 #endif
 
-#if defined (WIN32)
+#if defined _WIN32
     if (_mkdir(lc_save_dir) == -1 && errno != EEXIST) {
         printf(_("Couldn't create the save directory '%s'\n"), lc_save_dir);
         exit(-1);

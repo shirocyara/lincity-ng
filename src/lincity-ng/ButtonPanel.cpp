@@ -60,6 +60,9 @@ ButtonPanel::ButtonPanel()
 void
 ButtonPanel::parse(XmlReader& reader)
 {
+#ifdef _MSC_VER
+#define sscanf sscanf_s
+#endif
     XmlReader::AttributeIterator iter(reader);
     while(iter.next()) {
         const char* attribute = (const char*) iter.getName();
@@ -147,7 +150,7 @@ float ButtonPanel::requiredTech(int moduleType) {
             || group == GROUP_RESIDENCE_HH ){
         tl = 3 * MAX_TECH_LEVEL / 10;
     } else {   
-        tl = main_groups[ group ].tech * MAX_TECH_LEVEL/1000;
+        tl = (float)(main_groups[ group ].tech * MAX_TECH_LEVEL/1000);
     }
     
     return tl * 100 / MAX_TECH_LEVEL;
@@ -800,6 +803,7 @@ void ButtonPanel::menuButtonClicked(CheckButton* button,int b)
                     b->uncheck();
                 }
             } catch(std::exception &e) {
+				(void)e;
             }
         } else {
             toggleMenu(mMenus[i],false);

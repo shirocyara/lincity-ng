@@ -83,7 +83,7 @@
 #include "simulate.h"
 #include "engine.h"
 
-#if defined (WIN32) && !defined (NDEBUG)
+#if defined _WIN32 && !defined (NDEBUG)
 #define START_FAST_SPEED 1
 #define SKIP_OPENING_SCENE 1
 #endif
@@ -123,6 +123,10 @@ void load_city_old(char *cname)
 
 #ifdef DEBUG
     fprintf(stderr, "old file format, so load with old function, and then convert to new format\n");
+#endif
+
+#ifdef _MSC_VER
+#define sscanf sscanf_s
 #endif
 
     gzfile = gzopen(cname, "rb");
@@ -360,7 +364,7 @@ void load_city_old(char *cname)
     /* 10 dummy strings, for missed out things, have been put in save. */
     /* Input from this point uses them. */
     /* XXX: WCK: Huh? Missed out things? */
-
+#ifndef _MSC_VER
     sscanf(gzgets(gzfile, s, 256), "%128s", given_scene);
     if (strncmp(given_scene, "dummy", 5) == 0 || strlen(given_scene) < 3)
         given_scene[0] = 0;
@@ -369,6 +373,16 @@ void load_city_old(char *cname)
         sscanf(s, "%d", &highest_tech_level);
     else
         highest_tech_level = 0;
+#else
+	sscanf_s(gzgets(gzfile, s, 256), "%128s", given_scene, 260);
+	if (strncmp(given_scene, "dummy", 5) == 0 || strlen(given_scene) < 3)
+		given_scene[0] = 0;
+	sscanf_s(gzgets(gzfile, s, 256), "%128s", s, 256);
+	if (strncmp(given_scene, "dummy", 5) != 0)
+		sscanf(s, "%d", &highest_tech_level);
+	else
+		highest_tech_level = 0;
+#endif
 
     gzgets(gzfile, s, 200);   
     if (sscanf

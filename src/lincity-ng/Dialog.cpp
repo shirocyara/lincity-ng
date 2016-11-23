@@ -372,43 +372,96 @@ void Dialog::gameStats(){
     if (cheat_flag){
         setParagraphN( "statistic_text", line++, _("----- IN TEST MODE -------") );
     }
+#ifndef _MSC_VER
     snprintf (outf, maxlength, _("Game statistics from LinCity-NG Version %s"), PACKAGE_VERSION);
+#else
+	_snprintf_s(outf, maxlength, maxlength, _("Game statistics from LinCity-NG Version %s"), PACKAGE_VERSION);
+#endif
     setParagraphN( "statistic_text", line++, outf );
     if (strlen (given_scene) > 3){
+#ifndef _MSC_VER
 	    snprintf (outf, maxlength, _("Initial loaded scene - %s"), given_scene);
+#else
+		_snprintf_s(outf, maxlength, maxlength, _("Initial loaded scene - %s"), given_scene);
+#endif
         setParagraphN( "statistic_text", line++, outf );
     }
     if (sustain_flag){
+#ifndef _MSC_VER
 	    snprintf (outf, maxlength, _("Economy is sustainable"));
+#else
+		_snprintf_s(outf, maxlength, maxlength, _("Economy is sustainable"));
+#endif
         setParagraphN( "statistic_text", line++, outf );
     }
+#ifndef _MSC_VER
     snprintf (outf, maxlength, _("Population  %d  of which  %d  are not housed.")
 	     ,housed_population + people_pool, people_pool);
+#else
+	_snprintf_s(outf, maxlength, maxlength, _("Population  %d  of which  %d  are not housed.")
+		, housed_population + people_pool, people_pool);
+#endif
     setParagraphN( "statistic_text", line++, outf );
+#ifndef _MSC_VER
     snprintf (outf, maxlength,
 	     _("Max population %d  Number evacuated %d Total births %d")
 	     ,max_pop_ever, total_evacuated, total_births);
+#else
+	_snprintf_s(outf, maxlength, maxlength,
+		_("Max population %d  Number evacuated %d Total births %d")
+		, max_pop_ever, total_evacuated, total_births);
+#endif
     setParagraphN( "statistic_text", line++, outf );
-    snprintf (outf, maxlength,
+#ifndef _MSC_VER
+	snprintf (outf, maxlength,
 	     _("Date %s %04d  Money %8d   Tech-level %5.1f (%5.1f)"),
 	     current_month(total_time), current_year(total_time), total_money,
 	     (float) tech_level * 100.0 / MAX_TECH_LEVEL,
 	     (float) highest_tech_level * 100.0 / MAX_TECH_LEVEL);
+#else
+	_snprintf_s(outf, maxlength, maxlength,
+		_("Date %s %04d  Money %8d   Tech-level %5.1f (%5.1f)"),
+		current_month(total_time), current_year(total_time), total_money,
+		(float)tech_level * 100.0 / MAX_TECH_LEVEL,
+		(float)highest_tech_level * 100.0 / MAX_TECH_LEVEL);
+#endif
     setParagraphN( "statistic_text", line++, outf );
+#ifndef _MSC_VER
     snprintf (outf, maxlength,
 	     _("Deaths by starvation %7d   History %8.3f"),
 	     total_starve_deaths, starve_deaths_history);
+#else
+	_snprintf_s(outf, maxlength, maxlength,
+		_("Deaths by starvation %7d   History %8.3f"),
+		total_starve_deaths, starve_deaths_history);
+#endif
     setParagraphN( "statistic_text", line++, outf );
-    snprintf (outf, maxlength,
+#ifndef _MSC_VER
+	snprintf (outf, maxlength,
 	     _("Deaths from pollution %7d   History %8.3f"),
 	     total_pollution_deaths, pollution_deaths_history);
+#else
+	_snprintf_s(outf, maxlength, maxlength,
+		_("Deaths from pollution %7d   History %8.3f"),
+		total_pollution_deaths, pollution_deaths_history);
+#endif
     setParagraphN( "statistic_text", line++, outf );
-    snprintf (outf, maxlength, _("Years of unemployment %7d   History %8.3f"),
+#ifndef _MSC_VER
+	snprintf (outf, maxlength, _("Years of unemployment %7d   History %8.3f"),
 	     total_unemployed_years, unemployed_history);
+#else
+	_snprintf_s(outf, maxlength, maxlength, _("Years of unemployment %7d   History %8.3f"),
+		total_unemployed_years, unemployed_history);
+#endif
     setParagraphN( "statistic_text", line++, outf );
-    snprintf (outf, maxlength, _("Rockets launched %2d  Successful launches %2d"),
+#ifndef _MSC_VER
+	snprintf (outf, maxlength, _("Rockets launched %2d  Successful launches %2d"),
 	     rockets_launched, rockets_launched_success);
-    setParagraphN( "statistic_text", line++, outf );
+#else
+	_snprintf_s(outf, maxlength, maxlength, _("Rockets launched %2d  Successful launches %2d"),
+		rockets_launched, rockets_launched_success);
+#endif
+	setParagraphN( "statistic_text", line++, outf );
 
     while( line <= 11 ){ //clear remaining lines
         setParagraphN( "statistic_text", line++, "" );
@@ -511,6 +564,7 @@ void Dialog::saveGameStats(){
     if (cheat_flag){
         results << "----- IN TEST MODE -------"  << std::endl;
     }
+#ifndef _MSC_VER
     snprintf (outf, maxlength, "Game statistics from LinCity-NG Version %s", PACKAGE_VERSION);
     results << outf << std::endl;
     if (strlen (given_scene) > 3){
@@ -602,6 +656,99 @@ void Dialog::saveGameStats(){
     snprintf (outf, maxlength, "    Coal mines %4d       Ore mines %4d         Communes %4d"
 	     ,group_count[GROUP_COALMINE], group_count[GROUP_OREMINE]
 	     ,group_count[GROUP_COMMUNE]);
+#else
+	_snprintf_s(outf, maxlength, maxlength, "Game statistics from LinCity-NG Version %s", PACKAGE_VERSION);
+	results << outf << std::endl;
+	if (strlen(given_scene) > 3) {
+		_snprintf_s(outf, maxlength, maxlength, "Initial loaded scene - %s", given_scene);
+		results << outf << std::endl;
+	}
+	if (sustain_flag) {
+		_snprintf_s(outf, maxlength, maxlength, "Economy is sustainable");
+		results << outf << std::endl;
+	}
+	_snprintf_s(outf, maxlength, maxlength, "Population  %d  of which  %d  are not housed."
+		, housed_population + people_pool, people_pool);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength,
+		"Max population %d  Number evacuated %d Total births %d"
+		, max_pop_ever, total_evacuated, total_births);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength,
+		"Date %02d/%04d  Money %8d   Tech-level %5.1f (%5.1f)",
+		1 + ((total_time % NUMOF_DAYS_IN_YEAR) / NUMOF_DAYS_IN_MONTH), current_year(total_time), total_money,
+		(float)tech_level * 100.0 / MAX_TECH_LEVEL,
+		(float)highest_tech_level * 100.0 / MAX_TECH_LEVEL);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength,
+		" Deaths by starvation %7d   History %8.3f",
+		total_starve_deaths, starve_deaths_history);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength,
+		"Deaths from pollution %7d   History %8.3f",
+		total_pollution_deaths, pollution_deaths_history);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength, "Years of unemployment %7d   History %8.3f",
+		total_unemployed_years, unemployed_history);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength, "Rockets launched %2d  Successful launches %2d",
+		rockets_launched, rockets_launched_success);
+	results << outf << std::endl;
+	results << "" << std::endl;
+
+	_snprintf_s(outf, maxlength, maxlength, "    Residences %4d         Markets %4d            Farms %4d",
+		group_count[GROUP_RESIDENCE_LL] +
+		group_count[GROUP_RESIDENCE_ML] +
+		group_count[GROUP_RESIDENCE_HL] +
+		group_count[GROUP_RESIDENCE_LH] +
+		group_count[GROUP_RESIDENCE_MH] +
+		group_count[GROUP_RESIDENCE_HH],
+		group_count[GROUP_MARKET],
+		group_count[GROUP_ORGANIC_FARM]);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength, "   Water wells %4d", group_count[GROUP_WATERWELL]);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength, "     Monuments %4d         Schools %4d     Universities %4d"
+		, group_count[GROUP_MONUMENT], group_count[GROUP_SCHOOL]
+		, group_count[GROUP_UNIVERSITY]);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength, " Fire stations %4d           Parks %4d    Sports fields %4d"
+		, group_count[GROUP_FIRESTATION], group_count[GROUP_PARKLAND]
+		, group_count[GROUP_CRICKET]);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength, "Health centres %4d            Tips %4d         Shanties %4d",
+		group_count[GROUP_HEALTH], group_count[GROUP_TIP],
+		group_count[GROUP_SHANTY]);
+	results << outf << std::endl;
+	results << "" << std::endl;
+
+	_snprintf_s(outf, maxlength, maxlength, "     Windmills %4d     Coal powers %4d     Solar powers %4d",
+		group_count[GROUP_WINDMILL],
+		group_count[GROUP_COAL_POWER],
+		group_count[GROUP_SOLAR_POWER]);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength, "   Substations %4d     Power lines %4d            Ports %4d"
+		, group_count[GROUP_SUBSTATION], group_count[GROUP_POWER_LINE]
+		, group_count[GROUP_PORT]);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength, "        Tracks %4d           Roads %4d             Rail %4d"
+		, group_count[GROUP_TRACK], group_count[GROUP_ROAD]
+		, group_count[GROUP_RAIL]);
+	results << outf << std::endl;
+	results << "" << std::endl;
+
+	_snprintf_s(outf, maxlength, maxlength, "     Potteries %4d     Blacksmiths %4d            Mills %4d"
+		, group_count[GROUP_POTTERY], group_count[GROUP_BLACKSMITH]
+		, group_count[GROUP_MILL]);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength, "    Light inds %4d      Heavy inds %4d        Recyclers %4d"
+		, group_count[GROUP_INDUSTRY_L], group_count[GROUP_INDUSTRY_H]
+		, group_count[GROUP_RECYCLE]);
+	results << outf << std::endl;
+	_snprintf_s(outf, maxlength, maxlength, "    Coal mines %4d       Ore mines %4d         Communes %4d"
+		, group_count[GROUP_COALMINE], group_count[GROUP_OREMINE]
+		, group_count[GROUP_COMMUNE]);
+#endif
     results << outf << std::endl;
     results << "" << std::endl;
     

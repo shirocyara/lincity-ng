@@ -33,7 +33,7 @@
        ************************************************
 */
 #if defined (_MSC_VER)
-#   define snprintf _snprintf
+#   define snprintf _snprintf_s
 #endif
 #define USE_X11_PIXMAPS
 
@@ -49,11 +49,11 @@
 #define WARNING -2
 
 /* comment out the the next three lines for _slightly_ faster X drawing. */
-#if defined LC_X11 || defined WIN32
+#if defined LC_X11 || defined _WIN32
 #   define ALLOW_PIX_DOUBLING
 #endif
 
-#if defined (LC_X11) || defined (WIN32)
+#if defined (LC_X11) || defined _WIN32
 #    define BORDERX 30
 #    define BORDERY 30
 #endif

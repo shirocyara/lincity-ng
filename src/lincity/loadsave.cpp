@@ -82,7 +82,7 @@
 #include "stats.h"
 #include "loadsave.h"
 
-#if defined (WIN32) && !defined (NDEBUG)
+#if defined _WIN32 && !defined (NDEBUG)
 #define START_FAST_SPEED 1
 #define SKIP_OPENING_SCENE 1
 #endif
@@ -112,13 +112,15 @@ void save_city(char *cname)
 	char *s;
 	int l;
 
-	if ((l = strlen(cname)) < 2)
+	if ((l = (int)(strlen(cname))) < 2)
 		return;
 	if ((s = (char *)malloc(lc_save_dir_len + l + 16)) == 0)
 		malloc_failure();
-
+#ifndef _MSC_VER
 	sprintf(s, "%s%s%s", lc_save_dir, PHYSFS_getDirSeparator(), cname);
-
+#else
+	sprintf_s(s, lc_save_dir_len + l + 15, "%s%s%s", lc_save_dir, PHYSFS_getDirSeparator(), cname);
+#endif
 	save_city_2(s);
 	free(s);
 }
@@ -297,6 +299,10 @@ void load_city_2(char *cname)
 		do_error("Can't open it!");
 	}
 
+#ifdef _MSC_VER
+#define sscanf sscanf_s
+#endif
+
 	sscanf(gzgets(gzfile, s, 256), "%d", &ldsv_version);
 	if (ldsv_version < WATERWELL_V2) {
 		gzclose(gzfile);
@@ -465,7 +471,7 @@ void load_city_2(char *cname)
 
 	for (x = 0; x < NUMOF_MODULES; x++)
 		sscanf(gzgets(gzfile, s, 256), "%d", &(module_help_flag[x]));
-
+#ifndef _MSC_VER
 	sscanf(gzgets(gzfile, s, 256), "%128s", given_scene);
 	if (strncmp(given_scene, "dummy", 5) == 0 || strlen(given_scene) < 3)
 		given_scene[0] = 0;
@@ -474,6 +480,16 @@ void load_city_2(char *cname)
 		sscanf(s, "%d", &highest_tech_level);
 	else
 		highest_tech_level = 0;
+#else
+	sscanf_s(gzgets(gzfile, s, 256), "%128s", given_scene, 260);
+	if (strncmp(given_scene, "dummy", 5) == 0 || strlen(given_scene) < 3)
+		given_scene[0] = 0;
+	sscanf_s(gzgets(gzfile, s, 256), "%128s", s, 512);
+	if (strncmp(given_scene, "dummy", 5) != 0)
+		sscanf(s, "%d", &highest_tech_level);
+	else
+		highest_tech_level = 0;
+#endif
 
 	gzgets(gzfile, s, 200);   
 	if (sscanf

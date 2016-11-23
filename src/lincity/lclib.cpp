@@ -6,6 +6,7 @@
  * ---------------------------------------------------------------------- */
 
 //#include "lcconfig.h"
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "lcstring.h"
@@ -61,6 +62,8 @@ void num_to_ansi(char *s, size_t size, long num)
 {
     int triplets = 0;
     float numf = (float)num;
+	int i = 0;
+	char num_fmt[8] = "%3.1f%c";
 
     while (numf > 1000 || numf < -1000) {
         numf /= 1000;
@@ -92,66 +95,79 @@ void num_to_ansi(char *s, size_t size, long num)
     }
 
     if (size == 4) {            /* to make up for format_pos_number4.  Eeewwwwwww. */
+		i = 1;
         if (numf < 10) {
-            snprintf(s, size + 1, "%1.1f%c", numf, triplets);
+			num_fmt[1] = 1;
         } else {
-            snprintf(s, size + 1, "%3.0f%c", numf, triplets);
+			num_fmt[3] = 0;
         }
     } else {
+		i = 0;
         if (triplets == ' ') {
-            snprintf(s, size, "%3.1f", numf);
-        } else {
-            snprintf(s, size, "%3.1f%c", numf, triplets);
+			num_fmt[5] = '\0';
         }
     }
+#ifndef _MSC_VER
+	snprintf(s, size + i, num_fmt, numf, triplets);
+#else
+	_snprintf_s(s, size + i, (size + i - 1), num_fmt, numf, triplets);
+#endif
 }
 
 void num_to_ansi_unit(char *s, size_t size, long num, char unit)
 {
-    int triplets = 0;
-    float numf = (float)num;
+	int triplets = 0;
+	float numf = (float)num;
+	char num_fmt[10] = "%4.1f%c%c";
 
-    while (numf > 1000) {
-        numf /= 1000;
-        triplets++;
-    }
+	while (numf > 1000) {
+		numf /= 1000;
+		triplets++;
+	}
 
-    switch (triplets) {
-    case 0:
-        triplets = ' ';
-        break;
-    case 1:
-        triplets = 'k';
-        break;                  // kila
-    case 2:
-        triplets = 'M';
-        break;                  // mega
-    case 3:
-        triplets = 'G';
-        break;                  // giga 
-    case 4:
-        triplets = 'T';
-        break;                  // tera 
-    case 5:
-        triplets = 'P';
-        break;                  // peta
-    default:
-        triplets = '?';
-        break;
-    }
+	switch (triplets) {
+	case 0:
+		triplets = ' ';
+		break;
+	case 1:
+		triplets = 'k';
+		break;                  // kila
+	case 2:
+		triplets = 'M';
+		break;                  // mega
+	case 3:
+		triplets = 'G';
+		break;                  // giga 
+	case 4:
+		triplets = 'T';
+		break;                  // tera 
+	case 5:
+		triplets = 'P';
+		break;                  // peta
+	default:
+		triplets = '?';
+		break;
+	}
 
-    if (size == 4)              /* to make up for format_pos_number4 */
-        if (numf < 10)
-            snprintf(s, size, "%4.1f%c%c", numf, triplets, unit);
-        else
-            snprintf(s, size, "%4.0f%c%c", numf, triplets, unit);
-    else
-        snprintf(s, size, "%5.1f%c%c", numf, triplets, unit);
+	if (size == 4) {             /* to make up for format_pos_number4 */
+		if (numf < 10) {
+		}
+		else {
+			num_fmt[3] = '0';
+		}
+	} else {
+		num_fmt[1] = '5';
+	}
+#ifndef _MSC_VER
+	snprintf(s, size, num_fmt, numf, triplets, unit);
+#else
+	_snprintf_s(s, size, size - 1, num_fmt, numf, triplets, unit);
+#endif
 }
 
 /* commify: take a number and convert it to a string grouped into triplets
    with commas; returns number of characters written, excluding trailing zero
-*/
+*//*
 int commify(char *str, size_t size, int argnum)
 {
     size_t count = 0;
@@ -181,14 +197,14 @@ int commify(char *str, size_t size, int argnum)
         else
             count += snprintf(str + count, size - count, "%03d,", num ? num / kludge : num);
 
-        if (num)                /* don't divide by zero */
+        if (num)              */ /* don't divide by zero */ /*
             num %= kludge;
 
         kludge /= 1000;
     }
 
-    return count;
-}
+    return (int)count;
+}*/
 
 /* GCS - make sure that the string has length at least size-1 */
 void pad_with_blanks(char *str, int size)

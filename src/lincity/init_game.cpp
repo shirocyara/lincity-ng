@@ -319,14 +319,14 @@ static void new_setup_river_ground(void)
     const int SZ=128; // must be = 2^NLOOP
     const int SHIFT = (SZ - WORLD_SIDE_LEN) / 2; // center the visible map in the big one
     const float sigma = 3.5; // gaussian smoothing
-    const float ods2 = 1. / (2. * sigma * sigma);
+    const float ods2 = (float)(1. / (2. * sigma * sigma));
     const int mask_size = 11; // useless to be larger than 3*sigma && Must be < SHIFT 
-    const float fract = 0.9;
+    const float fract = (float)0.9;
 
     float mat[2 * mask_size + 1][2 * mask_size + 1];
     float g[SZ][SZ];
     float tmp[SZ][SZ];
-    float min = 10000000000000000000.;
+    float min = (float)10000000000000000000.;
     float norm;
     int i,j,k,l,m,n,size,h;
 
@@ -334,12 +334,12 @@ static void new_setup_river_ground(void)
     norm = 0;
     for ( i = 0; i < 2 * mask_size + 1; i++) {
         for ( j = 0; j < 2 * mask_size + 1; j++) {
-            float r2 = (i - mask_size) * (i - mask_size) + (j - mask_size) * (j - mask_size);
+            float r2 = (float)((i - mask_size) * (i - mask_size) + (j - mask_size) * (j - mask_size));
             mat[i][j] = exp(-r2 * ods2);
             norm += mat[i][j];
         }
     }
-    norm = 1. / norm;
+    norm = (float)(1. / norm);
 
    // intialisation
 #ifdef DEBUG
@@ -348,7 +348,7 @@ static void new_setup_river_ground(void)
     h = ( rand() % 10 + rand() % 10 ) * global_mountainity / 20;
     for (i = 0; i < SZ; i++) {
         for (j = 0; j < SZ; j++) {
-            g[i][j]=h;
+            g[i][j]=(float)h;
             tmp[i][j]=0;
         }
     }

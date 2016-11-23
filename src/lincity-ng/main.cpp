@@ -28,7 +28,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <stdio.h>
 #include <stdlib.h>
 #include <libxml/parser.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+#ifdef _WIN32
+#include <process.h>
+#endif
 
 #include "gui/FontManager.hpp"
 #include "gui/TextureManager.hpp"
@@ -85,7 +90,7 @@ void initPhysfs(const char* argv0)
     // Initialize physfs (this is a slightly modified version of
     // PHYSFS_setSaneConfig
     const char* application = LC_SAVE_DIR;
-#if defined (WIN32)
+#if defined _WIN32
 	const char* userdir = PHYSFS_getBaseDir();
 #else
 	const char* userdir = PHYSFS_getPrefDir("Lincity-NG","lincity-ng");
@@ -515,13 +520,13 @@ int main(int argc, char** argv)
     dictionaryManager = 0;
     PHYSFS_deinit();
     if( restart ){
-#ifdef WIN32
+#ifdef _WIN32
         //Windows has a Problem with Whitespaces.
         std::string fixWhiteSpaceInPathnameProblem;
 	    fixWhiteSpaceInPathnameProblem="\"";
 	    fixWhiteSpaceInPathnameProblem+=argv[0];
 	    fixWhiteSpaceInPathnameProblem+="\"";
-        execlp( argv[0], fixWhiteSpaceInPathnameProblem.c_str(), (char *) NULL );
+        _execlp( argv[0], fixWhiteSpaceInPathnameProblem.c_str(), (char *) NULL );
 #else
         execlp( argv[0], argv[0], (char *) NULL );
 #endif
@@ -529,3 +534,10 @@ int main(int argc, char** argv)
     return result;
 }
 
+#if _MSC_VER >= 1900
+int wmain(int argc, char* argv[])
+{
+	main(argc, argv);
+	return 0;
+}
+#endif

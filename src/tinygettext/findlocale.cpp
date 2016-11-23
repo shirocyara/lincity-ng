@@ -32,7 +32,7 @@ from the Author.
 #include <string.h>
 #include <ctype.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #include <winnt.h>
 #endif
@@ -139,7 +139,7 @@ accumulate_locstring(const char *str, FL_Locale *l) {
 }
 
 
-#ifndef WIN32
+#ifndef _WIN32
 static int
 accumulate_env(const char *name, FL_Locale *l) {
   char *env;
@@ -175,7 +175,7 @@ canonise_fl(FL_Locale *l) {
 }
 
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <stdio.h>
 #define ML(pn,sn) MAKELANGID(LANG_##pn, SUBLANG_##pn##_##sn)
 #define MLN(pn) MAKELANGID(LANG_##pn, SUBLANG_DEFAULT)
@@ -455,7 +455,7 @@ FL_FindLocale(FL_Locale **locale, FL_Domain /*domain*/) {
   rtn->country = NULL;
   rtn->variant = NULL;
 
-#ifdef WIN32
+#ifdef _WIN32
   /* win32 >= mswindows95 */
   {
     LCID lcid = GetThreadLocale();

@@ -1,4 +1,4 @@
-//  $Id: tinygettext.cpp,v 1.4 2004/11/25 13:15:56 matzebraun Exp $
+﻿//  $Id: tinygettext.cpp,v 1.4 2004/11/25 13:15:56 matzebraun Exp $
 //
 //  TinyGetText - A small flexible gettext() replacement
 //  Copyright (C) 2004 Ingo Ruhnke <grumbel@gmx.de>
@@ -32,6 +32,10 @@
 #include "PhysfsStream/PhysfsStream.hpp"
 #include "findlocale.hpp"
 
+#ifdef _MSC_VER
+#pragma execution_character_set("utf-8")
+#endif
+
 //#define TRANSLATION_DEBUG
 
 namespace TinyGetText {
@@ -41,21 +45,20 @@ std::string convert(const std::string& text,
                     const std::string& from_charset,
                     const std::string& to_charset)
 {
-  if (from_charset == to_charset)
-    return text;
+	if (from_charset == to_charset)
+		return text;
 
-  char *in = new char[text.length() + 1];
-  strcpy(in, text.c_str());
-  char *out = SDL_iconv_string(to_charset.c_str(), from_charset.c_str(), in, text.length() + 1);
-  delete[] in; 
-  if(out == 0)
-  {
-    std::cerr << "Error: conversion from " << from_charset << " to " << to_charset << " failed" << std::endl;
-    return "";
-  }
-  std::string ret(out);
-  SDL_free(out);
-  return ret;
+	char *in = new char[text.length() + 1];
+	strcpy(in, text.c_str());
+	char *out = SDL_iconv_string(to_charset.c_str(), from_charset.c_str(), in, text.length() + 1);
+	delete[] in; 
+	if(out == 0){
+		std::cerr << "Error: conversion from " << from_charset << " to " << to_charset << " failed" << std::endl;
+		return "";
+	}
+	std::string ret(out);
+	SDL_free(out);
+	return ret;
 #if 0
   iconv_t cd = SDL_iconv_open(to_charset.c_str(), from_charset.c_str());
 
@@ -255,71 +258,65 @@ Dictionary&
 DictionaryManager::get_dictionary(const std::string& spec)
 {
 
-  //log_debug << "Dictionary for language \"" << spec << "\" requested" << std::endl;
+	//log_debug << "Dictionary for language \"" << spec << "\" requested" << std::endl;
 
-  std::string lang = get_language_from_spec(spec);
+	std::string lang = get_language_from_spec(spec);
 
-  //log_debug << "...normalized as \"" << lang << "\"" << std::endl;
+	//log_debug << "...normalized as \"" << lang << "\"" << std::endl;
 
-  Dictionaries::iterator i = dictionaries.find(get_language_from_spec(lang));
-  if (i != dictionaries.end())
+	Dictionaries::iterator i = dictionaries.find(get_language_from_spec(lang));
+	if (i != dictionaries.end()) {
+		return i->second;
+    } else // Dictionary for languages lang isn't loaded, so we load it
     {
-      return i->second;
-    }
-  else // Dictionary for languages lang isn't loaded, so we load it
-    {
-      //std::cout << "get_dictionary: " << lang << std::endl;
-      Dictionary& dict = dictionaries[lang];
+		//std::cout << "get_dictionary: " << lang << std::endl;
+		Dictionary& dict = dictionaries[lang];
 
-      dict.set_language(get_language_def(lang));
-      if(charset != "")
-        dict.set_charset(charset);
+		dict.set_language(get_language_def(lang));
+		if(charset != "")
+			dict.set_charset(charset);
 
-      for (SearchPath::iterator p = search_path.begin(); p != search_path.end(); ++p)
-        {
-          char** files = PHYSFS_enumerateFiles(p->c_str());
-          if(!files)
-            {
-              std::cerr << "Error: enumerateFiles() failed on " << *p << std::endl;
-            }
-          else
-            {
-              for(const char* const* filename = files;
-                      *filename != 0; filename++) {
+		for (SearchPath::iterator p = search_path.begin(); p != search_path.end(); ++p) {
+			char** files = PHYSFS_enumerateFiles(p->c_str());
+			if(!files) {
+				std::cerr << "Error: enumerateFiles() failed on " << *p << std::endl;
+			} else {
+				for(const char* const* filename = files;
+					*filename != 0; filename++) {
 
-                // check if filename matches requested language
-		std::string fname = std::string(*filename);
-		std::string load_from_file = "";
-                if(fname == lang + ".po") {
-		  load_from_file = fname;
-		} else {
-                  std::string::size_type s = lang.find("_");
-                  if(s != std::string::npos) {
-                    std::string lang_short = std::string(lang, 0, s);
-		    if (fname == lang_short + ".po") {
-		      load_from_file = lang_short;
-		    }
-                  }
+					// check if filename matches requested language
+					std::string fname = std::string(*filename);
+					std::string load_from_file = "";
+					if(fname == lang + ".po") {
+						load_from_file = fname;
+					} else {
+						std::string::size_type s = lang.find("_");
+						if(s != std::string::npos) {
+							std::string lang_short = std::string(lang, 0, s);
+							if (fname == lang_short + ".po") {
+								load_from_file = lang_short;
+							}
+						}
+					}
+
+					// if it matched, load dictionary
+					if (load_from_file != "") {
+						//log_debug << "Loading dictionary for language \"" << lang << "\" from \"" << filename << "\"" << std::endl;
+						std::string pofile = *p + "/" + *filename;
+						try {
+							IFileStream in(pofile);
+							read_po_file(dict, in);
+						} catch(std::exception& e) {
+							std::cerr << "Error: Failure file opening: " << pofile << std::endl;
+							std::cerr << e.what() << "\n";
+						}
+					}
+				}
+				PHYSFS_freeList(files);
+			}
 		}
 
-	        // if it matched, load dictionary
-		if (load_from_file != "") {
-                  //log_debug << "Loading dictionary for language \"" << lang << "\" from \"" << filename << "\"" << std::endl;
-                  std::string pofile = *p + "/" + *filename;
-                  try {
-                      IFileStream in(pofile);
-                      read_po_file(dict, in);
-                  } catch(std::exception& e) {
-                      std::cerr << "Error: Failure file opening: " << pofile << std::endl;
-                      std::cerr << e.what() << "\n";
-                  }
-                }
-              }
-              PHYSFS_freeList(files);
-            }
-        }
-
-      return dict;
+		return dict;
     }
 }
 
@@ -524,83 +521,83 @@ Dictionary::add_translation(const std::string& msgid, const std::string& ,
 void
 Dictionary::add_translation(const std::string& msgid, const std::string& msgstr)
 {
-  entries[msgid] = msgstr;
+	entries[msgid] = msgstr;
 }
 
 class POFileReader
 {
 private:
-  struct Token
-  {
-    std::string keyword;
-    std::string content;
-  };
+	struct Token
+	{
+		std::string keyword;
+		std::string content;
+	};
 
-  Dictionary& dict;
+	Dictionary& dict;
 
-  std::string from_charset;
-  std::string to_charset;
+	std::string from_charset;
+	std::string to_charset;
 
-  std::string current_msgid;
-  std::string current_msgid_plural;
-  std::map<int, std::string> msgstr_plural;
+	std::string current_msgid;
+	std::string current_msgid_plural;
+	std::map<int, std::string> msgstr_plural;
 
-  int line_num;
+	int line_num;
 
-  enum { WANT_MSGID, WANT_MSGSTR, WANT_MSGSTR_PLURAL, WANT_MSGID_PLURAL } state;
+	enum { WANT_MSGID, WANT_MSGSTR, WANT_MSGSTR_PLURAL, WANT_MSGID_PLURAL } state;
 
 public:
   POFileReader(std::istream& in, Dictionary& dict_)
     : dict(dict_)
-  {
-    state = WANT_MSGID;
-    line_num = 0;
-    char c = in.get();
-    if(c == (char) 0xef) { // skip UTF-8 intro that some texteditors produce
-        in.get();
-        in.get();
-    } else {
-        in.unget();
-    }
-    tokenize_po(in);
-  }
+	{
+		state = WANT_MSGID;
+		line_num = 0;
+		char c = in.get();
+		if(c == (char) 0xef) { // skip UTF-8 intro that some texteditors produce
+			in.get();
+			in.get();
+		} else {
+			in.unget();
+		}
+		tokenize_po(in);
+	}
+	
+	void parse_header(const std::string& header)
+	{
+		// Seperate the header in lines
+		typedef std::vector<std::string> Lines;
+		Lines lines;
 
-  void parse_header(const std::string& header)
-  {
-    // Seperate the header in lines
-    typedef std::vector<std::string> Lines;
-    Lines lines;
+		std::string::size_type start = 0;
+		for(std::string::size_type i = 0; i < header.length(); ++i){
+			if (header[i] == '\n'){
+				lines.push_back(header.substr(start, i - start));
+				start = i+1;
+			}
+		}
 
-    std::string::size_type start = 0;
-    for(std::string::size_type i = 0; i < header.length(); ++i)
-      {
-        if (header[i] == '\n')
-          {
-            lines.push_back(header.substr(start, i - start));
-            start = i+1;
-          }
-      }
+		for(Lines::iterator i = lines.begin(); i != lines.end(); ++i){
+			if (has_prefix(*i, "Content-Type: text/plain; charset=")){
+				from_charset = i->substr(strlen("Content-Type: text/plain; charset="));
+				char str[sizeof(from_charset.c_str())];
+				for (int i = 0; i < (int)sizeof(from_charset.c_str()); i++) {
+					str[i] = toupper(from_charset.c_str()[i]);
+				}
+				from_charset = str;
+			}
+		}
 
-    for(Lines::iterator i = lines.begin(); i != lines.end(); ++i)
-      {
-        if (has_prefix(*i, "Content-Type: text/plain; charset=")) {
-          from_charset = i->substr(strlen("Content-Type: text/plain; charset="));
-        }
-      }
+		if (from_charset.empty() || from_charset == "CHARSET"){
+			std::cerr << "Error: Charset not specified for .po, fallback to ISO-8859-1" << std::endl;
+			from_charset = "ISO-8859-1";
+		}
 
-    if (from_charset.empty() || from_charset == "CHARSET")
-      {
-        std::cerr << "Error: Charset not specified for .po, fallback to ISO-8859-1" << std::endl;
-        from_charset = "ISO-8859-1";
-      }
-
-    to_charset = dict.get_charset();
-    if (to_charset.empty())
-      { // No charset requested from the dict, use utf-8
-        to_charset = "utf-8";
-        dict.set_charset(from_charset);
-      }
-  }
+		to_charset = dict.get_charset();
+		if (to_charset.empty()){ // No charset requested from the dict, use utf-8
+			to_charset = "UTF-8";
+			dict.set_charset(from_charset);
+		}
+	}
 
   void add_token(const Token& token)
   {
@@ -680,111 +677,99 @@ public:
       }
   }
 
-  inline int getchar(std::istream& in)
-  {
-    int c = in.get();
-    if (c == '\n')
-      line_num += 1;
-    return c;
-  }
+	inline int getchar(std::istream& in)
+	{
+		int c = in.get();
+		if (c == '\n')
+			line_num += 1;
+		return c;
+	}
 
-  void tokenize_po(std::istream& in)
-  {
-    enum State { READ_KEYWORD,
-                 READ_CONTENT,
-                 READ_CONTENT_IN_STRING,
-                 SKIP_COMMENT };
+	void tokenize_po(std::istream& in)
+	{
+		enum State { READ_KEYWORD,
+					 READ_CONTENT,
+					 READ_CONTENT_IN_STRING,
+					 SKIP_COMMENT };
 
-    State state = READ_KEYWORD;
-    int c;
-    Token token;
+		State state = READ_KEYWORD;
+		int c;
+		Token token;
 
-    while((c = getchar(in)) != EOF)
-      {
-        //std::cout << "Lexing char: " << char(c) << " " << state << std::endl;
-        switch(state)
-          {
-          case READ_KEYWORD:
-            if (c == '#')
-              {
-                state = SKIP_COMMENT;
-              }
-            else if (c == '\n')
-              {
-              }
-            else
-              {
-                // Read a new token
-                token = Token();
+		while((c = getchar(in)) != EOF){
+			//std::cout << "Lexing char: " << char(c) << " " << state << std::endl;
+			switch(state){
+				case READ_KEYWORD:
+					if (c == '#'){
+						state = SKIP_COMMENT;
+					}else if (c == '\n'){
+					}else{
+						// Read a new token
+						token = Token();
 
-                do { // Read keyword
-                  token.keyword += c;
-                } while((c = getchar(in)) != EOF && !isspace(static_cast<unsigned char>(c)));
-                in.unget();
+						do { // Read keyword
+							token.keyword += c;
+						} while((c = getchar(in)) != EOF && !isspace(static_cast<unsigned char>(c)));
+						in.unget();
 
-                state = READ_CONTENT;
-              }
-            break;
+						state = READ_CONTENT;
+					}
+					break;
 
-          case READ_CONTENT:
-            while((c = getchar(in)) != EOF)
-              {
-                if (c == '"') {
-                  // Found start of content
-                  state = READ_CONTENT_IN_STRING;
-                  break;
-                } else if (isspace(static_cast<unsigned char>(c))) {
-                  // skip
-                } else { // Read something that may be a keyword
-                  in.unget();
-                  state = READ_KEYWORD;
-                  add_token(token);
-                  token = Token();
-                  break;
-                }
-              }
-            break;
+				case READ_CONTENT:
+					while((c = getchar(in)) != EOF){
+						if (c == '"') {
+							// Found start of content
+							state = READ_CONTENT_IN_STRING;
+							break;
+						} else if (isspace(static_cast<unsigned char>(c))) {
+							// skip
+						} else { // Read something that may be a keyword
+							in.unget();
+							state = READ_KEYWORD;
+							add_token(token);
+							token = Token();
+							break;
+						}
+					}
+					break;
 
-          case READ_CONTENT_IN_STRING:
-            if (c == '\\') {
-              c = getchar(in);
-              if (c != EOF)
-                {
-                  if (c == 'n') token.content += '\n';
-                  else if (c == 't') token.content += '\t';
-                  else if (c == 'r') token.content += '\r';
-                  else if (c == '"') token.content += '"';
-                  else if (c == '\\') token.content += '\\';
-                  else
-                    {
-                      std::cout << "Unhandled escape character: " << char(c) << std::endl;
-                    }
-                }
-              else
-                {
-                  std::cout << "Unterminated string" << std::endl;
-                }
-            } else if (c == '"') { // Content string is terminated
-              state = READ_CONTENT;
-            } else {
-              token.content += c;
-            }
-            break;
+				case READ_CONTENT_IN_STRING:
+					if (c == '\\') {
+						c = getchar(in);
+						if (c != EOF){
+							if (c == 'n') token.content += '\n';
+							else if (c == 't') token.content += '\t';
+							else if (c == 'r') token.content += '\r';
+							else if (c == '"') token.content += '"';
+							else if (c == '\\') token.content += '\\';
+							else{
+								std::cout << "Unhandled escape character: " << char(c) << std::endl;
+							}
+						}else{
+							std::cout << "Unterminated string" << std::endl;
+						}
+					} else if (c == '"') { // Content string is terminated
+						state = READ_CONTENT;
+					} else {
+						token.content += c;
+					}
+					break;
 
-          case SKIP_COMMENT:
-            if (c == '\n')
-              state = READ_KEYWORD;
-            break;
-          }
-      }
-    add_token(token);
-    token = Token();
-  }
+				case SKIP_COMMENT:
+					if (c == '\n')
+						state = READ_KEYWORD;
+					break;
+			}
+		}
+		add_token(token);
+		token = Token();
+	}
 };
 
 void read_po_file(Dictionary& dict_, std::istream& in)
 {
-  POFileReader reader(in, dict_);
+	POFileReader reader(in, dict_);
 }
 
 } // namespace TinyGetText

@@ -7,8 +7,9 @@
 
 #include "modules.h"
 //#include "../lcconfig.h"
+#include "config.h"
 #include "organic_farm.h"
-#include "lin-city.h"
+#include "lincity/lin-city.h"
 
 #include <stdlib.h>
 

@@ -7,6 +7,7 @@
 
 #include "modules.h"
 //#include "../lcconfig.h"
+#include "config.h"
 #include "university.h"
 
 void do_university(int x, int y)
@@ -59,7 +60,14 @@ void mps_university(int x, int y)
     mps_store_title(i++, _("University"));
     i++;
     mps_store_title(i++, _("Tech Produced"));
+#ifndef _MSC_VER
     snprintf(s, sizeof(s), "%6.1f", MP_INFO(x, y).int_3 * 100.0 / MAX_TECH_LEVEL);
+#else
+	if (_snprintf_s(s, sizeof(s), (sizeof(s) - 1), "%6.1f", MP_INFO(x, y).int_3 * 100.0 / MAX_TECH_LEVEL) < 0) {
+		fprintf(stderr, "ERR:mps_university(int x, int y);\nCouldn't get map infomation\n");
+		return;
+	}
+#endif
     mps_store_title(i++, s);
     i++;
     mps_store_title(i++, _("Inventory"));

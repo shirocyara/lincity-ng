@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#if defined (WIN32)
+#if defined _WIN32
 #include "confw32.h"
 #else
 #include <config.h>

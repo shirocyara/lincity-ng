@@ -134,10 +134,10 @@ void general_transport(int x, int y, int max_waste)
 
     /* With the grey border we are sure that x-1 et al are inside the boundaries */
     base = &minfo->int_1;
-    xm1 = &minfo[-WORLD_SIDE_LEN].int_1 - base;
-    ym1 = &minfo[-1].int_1 - base;
-    xp1 = &minfo[WORLD_SIDE_LEN].int_1 - base;
-    yp1 = &minfo[1].int_1 - base;
+    xm1 = (int)(&minfo[-WORLD_SIDE_LEN].int_1 - base);
+    ym1 = (int)(&minfo[-1].int_1 - base);
+    xp1 = (int)(&minfo[WORLD_SIDE_LEN].int_1 - base);
+    yp1 = (int)(&minfo[1].int_1 - base);
 
     /*  */
     for (i = 0; i < 7; i++) {

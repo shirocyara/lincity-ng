@@ -5,6 +5,7 @@
  * (c) Corey Keasling, 2004
  * ---------------------------------------------------------------------- */
 
+#include <algorithm>
 #include "modules.h"
 #include "heavy_industry.h"
 
