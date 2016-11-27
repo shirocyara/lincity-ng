@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([lincity-ng], [2.0], [matze@braunis.de],,https://github.com/lincity-ng/lincity-ng)
+AC_INIT([lincity-ngW], [2.0.1], [shirocyara@yahoo.co.jp],,https://github.com/shirocyara/lincity-ng)
 AC_CONFIG_AUX_DIR([mk/autoconf])
 AC_CONFIG_MACRO_DIR([mk/macro])
 AM_INIT_AUTOMAKE(subdir-objects)

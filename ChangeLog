@@ -1,3 +1,6 @@
+Changes in 2.0.1 (27 Nov 2016)
+- Fix makerelease.sh
+
 
 < #ifdef _MSC_VER
 ---

@@ -5,6 +5,7 @@ echo "# automatically generated from data/gui/creditslist.xml. Do not edit. #">>
 find ./ -name *.o -exec rm {} \;
 find ./ -name *.a -exec rm {} \;
 find ./ -name *.exe -exec rm {} \;
+find ./ -name lincity-ng -type f -exec rm {} \;
 
 ./autogen.sh
 
