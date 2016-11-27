@@ -1,3 +1,4 @@
+
 Changes in 2.1.2 (23 Nov 2016)
 - Support for MSVC
 
@@ -64,6 +65,8 @@ Changes in 2.1.0 (11 Nov 2016)
 
 - Fix some Warning in compile
 
+Changes in 2.0.1 (27 Nov 2016)
+- Fix makerelease.sh
 
 Changes in 2.0.0 (06 Nov 2016)
 - Add contrib/win32/lincity-ng.rc for Windows
